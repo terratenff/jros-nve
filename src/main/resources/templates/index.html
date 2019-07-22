@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Anon-Stories</title>
+    <meta name="description" content="An Anonymous Site for Fixed Storytelling">
+    <meta name="author" content="terratenff">
+</head>
+
+<body>
+    <div id="page_top">
+        <h1>Storytellers Anonymous</h1>
+    </div>
+    <div id="page_options">
+        <ul id="page_options_list">
+            <li>Home</li>
+            <li>Story Selection</li>
+            <li>About</li>
+            <li>Help</li>
+        </ul>
+    </div>
+    <div id="page_content">
+        <div id="content">
+            <p>Add content here</p>
+        </div>
+        <div id="sidebar">
+            <div id="side_options">
+                <div class="sidebox" id="box_info">
+                    <p>Add information here, and means to hide it.</p>
+                </div>
+                <div class="sidebox" id="box_poll">
+                    <p>Add a Poll here</p>
+                </div>
+                <div class="sidebox" id="box_aesthetics">
+                    <p>Add aesthetic settings here.</p>
+                    <input type="checkbox" id="darkmode" name="Dark Mode" value="cssmode" onclick="toggleDarkMode()">
+                        <label for="checkbox"> Dark Mode</label>
+                    </input>
+                </div>
+                <div class="sidebox" id="box_shortcuts">
+                    <p>Add shortcut options here.</p>
+                </div>
+                <div class="sidebox" id="box_highlights">
+                    <p>Add highlights here.</p>
+                    <div id="counter"></div>
+                </div>
+            </div>
+            <div class="sidebox" id="ad_space">
+                <p>If there is leftover space, add ads here.</p>
+            </div>
+        </div>
+    </div>
+    <div id="page_bottom">
+        <ul id="page_bottom_list">
+            <li>Home</li>
+            <li>About</li>
+            <li>Rules</li>
+            <li>Guidelines</li>
+            <li>Contact</li>
+            <li>Help</li>
+            <li>FAQ</li>
+            <li>Instructions</li>
+            <li>Feedback</li>
+            <li>Tech Support</li>
+            <li>API</li>
+        </ul>
+    </div>
+    <!--<p th:text="'testing: ' + ${cssmode}"/>-->
+
+    <script src="https://unpkg.com/react@16.8.6/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/react_components/counter.js}"></script>
+    <script type="text/javascript" th:src="@{/js/cookie_functions.js}"></script>
+</body>
+
+</html>
