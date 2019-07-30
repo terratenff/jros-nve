@@ -14,10 +14,10 @@
     </div>
     <div id="page_options">
         <ul id="page_options_list">
-            <li>Home</li>
-            <li>Story Selection</li>
-            <li>About</li>
-            <li>Help</li>
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/story_selection}">Story Selection</a></li>
+            <li><a th:href="@{/about}">About</a></li>
+            <li><a th:href="@{/help}">Help</a></li>
         </ul>
     </div>
     <div id="page_content">
@@ -46,24 +46,21 @@
                     <div id="counter"></div>
                 </div>
             </div>
-            <div class="sidebox" id="ad_space">
-                <p>If there is leftover space, add ads here.</p>
-            </div>
         </div>
     </div>
     <div id="page_bottom">
         <ul id="page_bottom_list">
-            <li>Home</li>
-            <li>About</li>
-            <li>Rules</li>
-            <li>Guidelines</li>
-            <li>Contact</li>
-            <li>Help</li>
-            <li>FAQ</li>
-            <li>Instructions</li>
-            <li>Feedback</li>
-            <li>Tech Support</li>
-            <li>API</li>
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/about}">About</a></li>
+            <li><a th:href="@{/rules}">Rules</a></li>
+            <li><a th:href="@{/guidelines}">Guidelines</a></li>
+            <li><a th:href="@{/contact}">Contact</a></li>
+            <li><a th:href="@{/help}">Help</a></li>
+            <li><a th:href="@{/faq}">FAQ</a></li>
+            <li><a th:href="@{/instructions}">Instructions</a></li>
+            <li><a th:href="@{/feedback}">Feedback</a></li>
+            <li><a th:href="@{/support}">Tech Support</a></li>
+            <li><a th:href="@{/api}">API</a></li>
         </ul>
     </div>
     <!--<p th:text="'testing: ' + ${cssmode}"/>-->
