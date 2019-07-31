@@ -23,28 +23,20 @@
     <div id="page_content">
         <div id="content">
             <p>Add content here</p>
+            <p th:text="'Help Thing: ' + ${helpkey}"></p>
+            <input type="checkbox" id="darkmode" name="Dark Mode" value="cssmode" onclick="toggleDarkMode()">
+                <label for="checkbox"> Dark Mode</label>
+            </input>
         </div>
         <div id="sidebar">
             <div id="side_options">
-                <div class="sidebox" id="box_info">
-                    <p>Add information here, and means to hide it.</p>
-                </div>
-                <div class="sidebox" id="box_poll">
-                    <p>Add a Poll here</p>
-                </div>
-                <div class="sidebox" id="box_aesthetics">
-                    <p>Add aesthetic settings here.</p>
-                    <input type="checkbox" id="darkmode" name="Dark Mode" value="cssmode" onclick="toggleDarkMode()">
-                        <label for="checkbox"> Dark Mode</label>
-                    </input>
-                </div>
-                <div class="sidebox" id="box_shortcuts">
-                    <p>Add shortcut options here.</p>
-                </div>
-                <div class="sidebox" id="box_highlights">
-                    <p>Add highlights here.</p>
-                    <div id="counter"></div>
-                </div>
+                <div style="height:10px;"></div>
+                <div id="box_info"></div>
+                <div id="box_poll"></div>
+                <div id="box_aesthetics"></div>
+                <div id="box_shortcuts"></div>
+                <div id="box_highlights"></div>
+                <div id="counter"></div>
             </div>
         </div>
     </div>
@@ -68,6 +60,11 @@
     <script src="https://unpkg.com/react@16.8.6/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"></script>
     <script type="text/javascript" th:src="@{/js/react_components/counter.js}"></script>
+    <script type="text/javascript" th:src="@{/js/react_components/infobox.js}"></script>
+    <script type="text/javascript" th:src="@{/js/react_components/pollbox.js}"></script>
+    <script type="text/javascript" th:src="@{/js/react_components/aestheticsbox.js}"></script>
+    <script type="text/javascript" th:src="@{/js/react_components/shortcutsbox.js}"></script>
+    <script type="text/javascript" th:src="@{/js/react_components/highlightsbox.js}"></script>
     <script type="text/javascript" th:src="@{/js/cookie_functions.js}"></script>
 </body>
 

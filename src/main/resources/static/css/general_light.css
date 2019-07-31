@@ -60,6 +60,7 @@ label {
 
 #page_content {
     min-height: 600px;
+    display: flex;
     border: 5px solid #bbbbbb;
     box-sizing: content-box;
 }
@@ -108,4 +109,49 @@ label {
     text-decoration: none;
     width: 100%;
     height: 100%;
+}
+
+/* ---------------------------------------------------------------------- */
+/*                                  --- Settings for React-Components --- */
+/* ---------------------------------------------------------------------- */
+
+div.sideboxtop {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 25px;
+    background-color: green;
+}
+
+p.sideboxtop {
+    margin: 0;
+    float: left;
+    width: inherit;
+    height: inherit;
+    color: white;
+    font-size: 16px;
+}
+
+button.sideboxtop {
+    float: right;
+    height: inherit;
+    background-color: inherit;
+}
+
+div.sideboxcontent {
+    font-size: 16px;
+    width: 80%;
+    margin: auto;
+    height: 300px;
+    background-color: darkgreen;
+}
+
+p.sideboxcontent {
+    margin: 0;
+    color: yellow;
+}
+
+.sideboxparent {
+    font-size: 0;
+    margin: auto;
 }

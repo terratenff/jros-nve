@@ -30,6 +30,8 @@ public class BaseController {
     private final String SUPPORT = "/support";
     private final String API = "/api";
 
+    private int helpCounter = 0;
+
     /**
      * View-function for the home page.
      */
@@ -38,6 +40,8 @@ public class BaseController {
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        // mav.addObject("key", value);
+        // On HTML, use the following: <p th:text="'Text ' + ${key}"></p>
         return mav;
     }
 
@@ -70,6 +74,8 @@ public class BaseController {
     public ModelAndView help() {
         // TODO
         ModelAndView mav = new ModelAndView();
+        helpCounter += 1;
+        mav.addObject("helpkey", helpCounter);
         mav.setViewName("index");
         return mav;
     }
