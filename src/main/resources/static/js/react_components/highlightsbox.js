@@ -1,8 +1,8 @@
 'use strict';
 
 /**
- * This is a box that can be hidden, set to contain a set of links that
- * could be used as shortcuts around the website.
+ * This is a box that can be hidden, set to contain a set of links to stories
+ * that are currently highlighted.
  */
 class HighlightsBox extends React.Component {
     constructor(props) {
