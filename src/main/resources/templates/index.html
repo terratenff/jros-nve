@@ -23,6 +23,10 @@
     <div id="page_content">
         <div id="content">
             <p>Add content here</p>
+            <th:block th:each="text,iter : ${texts}">
+                <p th:text="'Entry ' + (${iter.index} + 1) + ' / ' + ${iter.size}"></p>
+                <p th:text="${text}"></p>
+            </th:block>
             <p th:text="'Help Thing: ' + ${helpkey}"></p>
             <input type="checkbox" id="darkmode" name="Dark Mode" value="cssmode" onclick="toggleDarkMode()">
                 <label for="checkbox"> Dark Mode</label>

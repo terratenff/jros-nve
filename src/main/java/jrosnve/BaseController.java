@@ -6,7 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.stereotype.Controller;
 
+import java.util.ArrayList;
+
 import jrosnve.database_operators.DBBroker;
+import jrosnve.utilities.FileReader;
 
 /**
  * The Base Controller, with no initial mapping. One can access the
@@ -40,6 +43,8 @@ public class BaseController {
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        String[] contents = FileReader.getParagraphs("src/main/resources/textfiles/index.txt");
+        mav.addObject("texts", contents);
         // mav.addObject("key", value);
         // On HTML, use the following: <p th:text="'Text ' + ${key}"></p>
         return mav;
@@ -53,6 +58,14 @@ public class BaseController {
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("Hello There!");
+        list.add("This is an assortment of texts.");
+        list.add("Such texts will be created from text files.");
+        list.add("That way we don't have to fill HTML files manually.");
+        list.add("Bye!");
+        String[] list2 = {"A", "B", "C", "D"};
+        mav.addObject("texts", list2);
         return mav;
     }
 
