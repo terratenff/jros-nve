@@ -34,13 +34,9 @@ class AestheticsBox extends React.Component {
                 + ' available setting to the user is the Dark Mode.'
             ),
             React.createElement(
-                'checkbox',
-                {id: 'darkmode0', name: 'Dark Mode0', value: 'cssmode0'},
-                React.createElement(
-                    'label',
-                    {for: 'checkbox'},
-                    ' Dark Mode0'
-                )
+                'button',
+                {onClick: () => toggleDarkMode()},
+                'Toggle Dark Mode'
             )
         );
     }

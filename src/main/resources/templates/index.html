@@ -6,6 +6,8 @@
     <title>Anon-Stories</title>
     <meta name="description" content="An Anonymous Site for Fixed Storytelling">
     <meta name="author" content="terratenff">
+    <script type="text/javascript" th:src="@{/js/cookie_management/cookie_functions.js}"></script>
+    <script type="text/javascript" th:src="@{/js/cookie_management/dark_mode.js}"></script>
 </head>
 
 <body>
@@ -28,9 +30,6 @@
                 <p th:text="${text}"></p>
             </th:block>
             <p th:text="'Help Thing: ' + ${helpkey}"></p>
-            <input type="checkbox" id="darkmode" name="Dark Mode" value="cssmode" onclick="toggleDarkMode()">
-                <label for="checkbox"> Dark Mode</label>
-            </input>
         </div>
         <div id="sidebar">
             <div id="side_options">
@@ -40,7 +39,6 @@
                 <div id="box_aesthetics"></div>
                 <div id="box_shortcuts"></div>
                 <div id="box_highlights"></div>
-                <div id="counter"></div>
             </div>
         </div>
     </div>
@@ -63,13 +61,11 @@
 
     <script src="https://unpkg.com/react@16.8.6/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"></script>
-    <script type="text/javascript" th:src="@{/js/react_components/counter.js}"></script>
     <script type="text/javascript" th:src="@{/js/react_components/infobox.js}"></script>
     <script type="text/javascript" th:src="@{/js/react_components/pollbox.js}"></script>
     <script type="text/javascript" th:src="@{/js/react_components/aestheticsbox.js}"></script>
     <script type="text/javascript" th:src="@{/js/react_components/shortcutsbox.js}"></script>
     <script type="text/javascript" th:src="@{/js/react_components/highlightsbox.js}"></script>
-    <script type="text/javascript" th:src="@{/js/cookie_functions.js}"></script>
 </body>
 
 </html>

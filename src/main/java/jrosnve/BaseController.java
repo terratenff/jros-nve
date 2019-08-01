@@ -43,7 +43,7 @@ public class BaseController {
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
-        String[] contents = FileReader.getParagraphs("src/main/resources/textfiles/index.txt");
+        String[] contents = FileReader.getParagraphs("index.txt");
         mav.addObject("texts", contents);
         // mav.addObject("key", value);
         // On HTML, use the following: <p th:text="'Text ' + ${key}"></p>
