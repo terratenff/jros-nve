@@ -24,12 +24,16 @@
     </div>
     <div id="page_content">
         <div id="content">
-            <p>Add content here</p>
+            <div th:switch="${pageContext}" th:remove="tag">
+                <th:block th:case="0" th:include="fragments/base_fragments :: test_fragment"></th:block>
+                <th:block th:case="1" th:include="fragments/base_fragments :: test_fragment"></th:block>
+                <th:block th:case="2" th:include="fragments/base_fragments :: test_fragment"></th:block>
+                <th:block th:case="*" th:include="fragments/base_fragments :: test_fragment2"></th:block>
+            </div>
             <th:block th:each="text,iter : ${texts}">
-                <p th:text="'Entry ' + (${iter.index} + 1) + ' / ' + ${iter.size}"></p>
+                <!--<p th:text="'Entry ' + (${iter.index} + 1) + ' / ' + ${iter.size}"></p>-->
                 <p th:text="${text}"></p>
             </th:block>
-            <p th:text="'Help Thing: ' + ${helpkey}"></p>
         </div>
         <div id="sidebar">
             <div id="side_options">
@@ -57,7 +61,6 @@
             <li><a th:href="@{/api}">API</a></li>
         </ul>
     </div>
-    <!--<p th:text="'testing: ' + ${cssmode}"/>-->
 
     <script src="https://unpkg.com/react@16.8.6/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"></script>

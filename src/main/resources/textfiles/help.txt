@@ -1,0 +1,71 @@
+There are a few ways that Storytellers Anonymous can be used.
+
+%P%
+
+The primary functions of the service can be found under "Story Selection".
+There you can read a complete story, fill in the blanks on an
+incomplete story or create a new story, both complete and incomplete.
+
+%P%
+
+1 / 5 - Reading a complete story
+
+%P%
+
+Choosing to read a complete story takes you to a story instance that has
+been saved for others to see. Upon viewing the story, you have the option
+to rate it based on specific criteria.
+
+%P%
+
+2 / 5 - Completing an incomplete story
+
+%P%
+
+If you choose to complete an existing, incomplete story, you'll be presented
+with a set of prompts that you are to fill. They also contain grammatical
+context clues for each prompt, so that you can fill in the blanks correctly.
+If you leave some of the prompts empty, default words will be used in such
+places.
+
+%P%
+
+Once you fill in all of the prompts, you can submit it. You'll then be
+presented with a complete story that contains your inputs. You can then
+choose whether you'd like to make it public. Additionally, you can rate
+the incomplete story on its quality, usability etc.
+
+%P%
+
+3 / 5 - Creating an incomplete story
+
+%P%
+
+Here you'll be presented with a text box, in which you are to write the story.
+You are instructed to write a complete story that contains the default words.
+There are separate text fields where you can write the context clues (for
+example, how exactly should the words be typed). If no context clue is given,
+for a prompt, then the default word is used as the context clue.
+
+%P%
+
+You can find further information while creating a story.
+
+%P%
+
+4 / 5 - Storytellers Highlights
+
+%P%
+
+Some stories may achieve a high rating in a specific criterion. You can
+access these kinds of stories via "Storytellers Highlights".
+
+%P%
+
+5 / 5 - Storytellers Anonymous API
+
+%P%
+
+Stories provided to you in the usual fashion provide you with a random
+story. If there is a particular story you'd like to access, you can consult
+the Storytellers Anonymous API page for more information.

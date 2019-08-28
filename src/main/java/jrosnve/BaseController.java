@@ -33,8 +33,6 @@ public class BaseController {
     private final String SUPPORT = "/support";
     private final String API = "/api";
 
-    private int helpCounter = 0;
-
     /**
      * View-function for the home page.
      */
@@ -46,7 +44,7 @@ public class BaseController {
         String[] contents = FileReader.getParagraphs("index.txt");
         mav.addObject("texts", contents);
         // mav.addObject("key", value);
-        // On HTML, use the following: <p th:text="'Text ' + ${key}"></p>
+        // <p th:text="'Text ' + ${key}"></p>
         return mav;
     }
 
@@ -58,14 +56,9 @@ public class BaseController {
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
-        ArrayList<String> list = new ArrayList<String>();
-        list.add("Hello There!");
-        list.add("This is an assortment of texts.");
-        list.add("Such texts will be created from text files.");
-        list.add("That way we don't have to fill HTML files manually.");
-        list.add("Bye!");
-        String[] list2 = {"A", "B", "C", "D"};
-        mav.addObject("texts", list2);
+        String[] contents = FileReader.getParagraphs("story_selection.txt");
+        mav.addObject("texts", contents);
+        mav.addObject("pageContext", 0);
         return mav;
     }
 
@@ -77,6 +70,8 @@ public class BaseController {
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        String[] contents = FileReader.getParagraphs("about.txt");
+        mav.addObject("texts", contents);
         return mav;
     }
 
@@ -87,9 +82,9 @@ public class BaseController {
     public ModelAndView help() {
         // TODO
         ModelAndView mav = new ModelAndView();
-        helpCounter += 1;
-        mav.addObject("helpkey", helpCounter);
         mav.setViewName("index");
+        String[] contents = FileReader.getParagraphs("help.txt");
+        mav.addObject("texts", contents);
         return mav;
     }
 

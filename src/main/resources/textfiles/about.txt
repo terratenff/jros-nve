@@ -1,0 +1,22 @@
+The Storytellers Anonymous is a website in which users can make stories
+for other users to complete and share them with other readers to read.
+
+%P%
+
+The stories can be created, completed and read anonymously. The stories can
+also be rated based on different criteria, which are taken into account
+whenever readers look into highlighted stories.
+
+%P%
+
+This service is based on the well-known social game; the writer of the group
+creates a story with blanks, while other people in the group fill the blanks
+without knowing the full story. Once all of the blanks have been filled,
+the writer tells the story. Often times hilarity would ensue.
+
+%P%
+
+The Storytellers Anonymous allows you to take part in such a social game by
+yourself, without the need of a group. You can contribute to the service
+by creating new stories for others to complete, or by filling blanks on
+incomplete stories, so that others can read the complete story.
