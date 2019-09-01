@@ -26,7 +26,7 @@
         <div id="content">
             <div th:switch="${pageContext}" th:remove="tag">
                 <th:block th:case="0" th:include="fragments/base_fragments :: test_fragment"></th:block>
-                <th:block th:case="1" th:include="fragments/base_fragments :: test_fragment"></th:block>
+                <th:block th:case="1" th:include="fragments/base_fragments :: story_selection"></th:block>
                 <th:block th:case="2" th:include="fragments/base_fragments :: test_fragment"></th:block>
                 <th:block th:case="*" th:include="fragments/base_fragments :: test_fragment2"></th:block>
             </div>

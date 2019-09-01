@@ -43,6 +43,7 @@ public class BaseController {
         mav.setViewName("index");
         String[] contents = FileReader.getParagraphs("index.txt");
         mav.addObject("texts", contents);
+        mav.addObject("pageContext", 0);
         // mav.addObject("key", value);
         // <p th:text="'Text ' + ${key}"></p>
         return mav;
@@ -58,7 +59,7 @@ public class BaseController {
         mav.setViewName("index");
         String[] contents = FileReader.getParagraphs("story_selection.txt");
         mav.addObject("texts", contents);
-        mav.addObject("pageContext", 0);
+        mav.addObject("pageContext", 1);
         return mav;
     }
 
@@ -72,6 +73,7 @@ public class BaseController {
         mav.setViewName("index");
         String[] contents = FileReader.getParagraphs("about.txt");
         mav.addObject("texts", contents);
+        mav.addObject("pageContext", 2);
         return mav;
     }
 

@@ -8,5 +8,30 @@
     <div th:fragment="test_fragment2" th:remove="tag">
         <p>Test Fragment 2</p>
     </div>
+    <div th:fragment="story_selection" th:remove="tag">
+        <div id="story_selector">
+            <a th:href="@{/}">
+                <div class="story_option">
+                    <h4>Read a Story</h4>
+                    <div></div>
+                    <p>Pick up a random, complete story to read!</p>
+                </div>
+            </a>
+            <a th:href="@{/}">
+                <div class="story_option">
+                    <h4>Complete a Story</h4>
+                    <div></div>
+                    <p>Take on an incomplete story by filling the blanks!</p>
+                </div>
+            </a>
+            <a th:href="@{/}">
+                <div class="story_option">
+                    <h4>Create a Story</h4>
+                    <div></div>
+                    <p>Write a story from scratch, along with a template for others to complete!</p>
+                </div>
+            </a>
+        </div>
+    </div>
 </body>
 </html>

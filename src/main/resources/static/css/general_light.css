@@ -112,6 +112,62 @@ label {
 }
 
 /* ---------------------------------------------------------------------- */
+/*                          --- Settings for Story-Selector -Fragment --- */
+/* ---------------------------------------------------------------------- */
+
+#story_selector {
+    width: 75%;
+    margin: 5px auto;
+    height: 300px;
+    display: table;
+}
+
+#story_selector > a {
+    display: table-cell;
+    width: 25%;
+    height: inherit;
+    text-decoration: none;
+}
+
+div.story_option {
+    display: table-cell;
+    border: 3px solid #99b3ff;
+    background-color: #ccebff;
+    box-sizing: border-box;
+    text-align: center;
+    width: inherit;
+    height: inherit;
+    overflow: hidden;
+}
+
+div.story_option:hover {
+    border: 3px solid #008ae6;
+    background-color: #00cc00;
+    opacity: 0.80;
+}
+
+div.story_option > h4 {
+    color: black;
+    font-family: sans-serif;
+}
+
+div.story_option > p {
+    color: black;
+    font-family: sans-serif;
+}
+
+div.story_option > div {
+    width: 80%;
+    height: 50%;
+    margin: 0 auto;
+    background-image: radial-gradient(#00cc00, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+}
+
+div.story_option:hover > div {
+    background-image: radial-gradient(white, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+}
+
+/* ---------------------------------------------------------------------- */
 /*                                  --- Settings for React-Components --- */
 /* ---------------------------------------------------------------------- */
 
