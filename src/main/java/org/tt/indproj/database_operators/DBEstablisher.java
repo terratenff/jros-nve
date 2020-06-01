@@ -1,4 +1,4 @@
-package jrosnve.database_operators;
+package org.tt.indproj.database_operators;
 
 import java.io.File;
 import java.sql.Connection;

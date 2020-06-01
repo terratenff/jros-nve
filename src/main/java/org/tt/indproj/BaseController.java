@@ -1,4 +1,4 @@
-package jrosnve;
+package org.tt.indproj;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 
-import jrosnve.database_operators.DBBroker;
-import jrosnve.utilities.FileReader;
+import org.tt.indproj.database_operators.DBBroker;
+import org.tt.indproj.utilities.FileReader;
 
 /**
  * The Base Controller, with no initial mapping. One can access the
