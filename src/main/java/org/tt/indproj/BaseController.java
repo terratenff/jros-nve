@@ -1,9 +1,12 @@
 package org.tt.indproj;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
@@ -19,6 +22,8 @@ import org.tt.indproj.utilities.FileReader;
 @Controller
 @RequestMapping("")
 public class BaseController {
+	
+	private static Logger logger = LoggerFactory.getLogger(BaseController.class);
 
     private final String HOME = "";
     private final String STORY = "/story_selection";
@@ -32,12 +37,14 @@ public class BaseController {
     private final String FEEDBACK = "/feedback";
     private final String SUPPORT = "/support";
     private final String API = "/api";
+    private final String LOGIN = "/login";
 
     /**
      * View-function for the home page.
      */
     @RequestMapping(HOME)
     public ModelAndView index() {
+    	logger.info("Navigated to '" + HOME + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -54,6 +61,7 @@ public class BaseController {
      */
     @RequestMapping(STORY)
     public ModelAndView storySelection() {
+    	logger.info("Navigated to '" + STORY + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -68,6 +76,7 @@ public class BaseController {
      */
     @RequestMapping(ABOUT)
     public ModelAndView about() {
+    	logger.info("Navigated to '" + ABOUT + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -82,6 +91,7 @@ public class BaseController {
      */
     @RequestMapping(HELP)
     public ModelAndView help() {
+    	logger.info("Navigated to '" + HELP + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -95,6 +105,7 @@ public class BaseController {
      */
     @RequestMapping(RULES)
     public ModelAndView rules() {
+    	logger.info("Navigated to '" + RULES + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -106,6 +117,7 @@ public class BaseController {
      */
     @RequestMapping(GUIDELINES)
     public ModelAndView guidelines() {
+    	logger.info("Navigated to '" + GUIDELINES + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -117,6 +129,7 @@ public class BaseController {
      */
     @RequestMapping(CONTACT)
     public ModelAndView contact() {
+    	logger.info("Navigated to '" + CONTACT + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -128,6 +141,7 @@ public class BaseController {
      */
     @RequestMapping(FAQ)
     public ModelAndView faq() {
+    	logger.info("Navigated to '" + FAQ + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -139,6 +153,7 @@ public class BaseController {
      */
     @RequestMapping(INSTRUCTIONS)
     public ModelAndView instructions() {
+    	logger.info("Navigated to '" + INSTRUCTIONS + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -150,6 +165,7 @@ public class BaseController {
      */
     @RequestMapping(FEEDBACK)
     public ModelAndView feedback() {
+    	logger.info("Navigated to '" + FEEDBACK + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -161,6 +177,7 @@ public class BaseController {
      */
     @RequestMapping(SUPPORT)
     public ModelAndView support() {
+    	logger.info("Navigated to '" + SUPPORT + "'.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -172,6 +189,37 @@ public class BaseController {
      */
     @RequestMapping(API)
     public ModelAndView api() {
+    	logger.info("Navigated to '" + API + "'.");
+        // TODO
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("index");
+        //DBBroker.createDatabase();
+        return mav;
+    }
+    
+    /**
+     * View-function for authentication purposes.
+     */
+    @RequestMapping(value = LOGIN, method = RequestMethod.POST)
+    public ModelAndView loginPost(@RequestParam("username") String username,
+    		@RequestParam("pwd") String password) {
+    	logger.info("Navigated to '" + LOGIN + "'. An attempt to log in was made.");
+        // TODO: User Authentication.
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("index");
+        //DBBroker.createDatabase();
+        System.out.println("HEY");
+        System.out.println(username);
+        System.out.println(password);
+        return mav;
+    }
+    
+    /**
+     * View-function for authentication purposes.
+     */
+    @RequestMapping(value = LOGIN, method = RequestMethod.GET)
+    public ModelAndView loginGet() {
+    	logger.info("Navigated to '" + LOGIN + "'. Login page visited.");
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");

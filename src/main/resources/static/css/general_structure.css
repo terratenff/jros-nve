@@ -1,0 +1,187 @@
+html {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+#content > p {
+    padding-left: 10px;
+    font-family: sans-serif;
+}
+
+label {
+
+}
+
+#page_top {
+    height: 100px;
+}
+
+#page_top > h1 {
+    margin-top: 0px;
+    font-size: 60px;
+    font-family: sans-serif;
+    line-height: 100px;
+    text-align: center;
+}
+
+#page_options_list > li {
+    display: inline-block;
+    text-align: center;
+    padding: 4px;
+    font-size: 30px;
+    font-family: sans-serif;
+    border-radius: 20px;
+    width: 300px;
+}
+
+#page_options_list > li:hover {
+
+}
+
+#page_options_list li a {
+    margin: 0px;
+    display: block;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+}
+
+#page_content {
+    min-height: 600px;
+    display: flex;
+    box-sizing: content-box;
+}
+
+#content {
+    min-height: inherit;
+    width: 70%;
+    box-sizing: border-box;
+    float: left;
+}
+
+#sidebar {
+    min-height: inherit;
+    width: 30%;
+    box-sizing: border-box;
+    float: left;
+}
+
+.sidebox > p {
+
+}
+
+#page_bottom_list > li {
+    display: inline-block;
+    text-align: center;
+    padding: 2px;
+    font-size: 15px;
+    font-family: sans-serif;
+    border-radius: 10px;
+    width: 100px;
+}
+
+#page_bottom_list > li:hover {
+
+}
+
+#page_bottom_list li a {
+    margin: 0px;
+    display: block;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+}
+
+/* ---------------------------------------------------------------------- */
+/*                          --- Settings for Story-Selector -Fragment --- */
+/* ---------------------------------------------------------------------- */
+
+#story_selector {
+    width: 75%;
+    margin: 5px auto;
+    height: 300px;
+    display: table;
+}
+
+#story_selector > a {
+    display: table-cell;
+    width: 25%;
+    height: inherit;
+    text-decoration: none;
+}
+
+div.story_option {
+    display: table-cell;
+    box-sizing: border-box;
+    text-align: center;
+    width: inherit;
+    height: inherit;
+    overflow: hidden;
+}
+
+div.story_option:hover {
+
+}
+
+div.story_option > h4 {
+    font-family: sans-serif;
+}
+
+div.story_option > p {
+    font-family: sans-serif;
+}
+
+div.story_option > div {
+    width: 80%;
+    height: 50%;
+    margin: 0 auto;
+}
+
+div.story_option:hover > div {
+
+}
+
+/* ---------------------------------------------------------------------- */
+/*                                  --- Settings for React-Components --- */
+/* ---------------------------------------------------------------------- */
+
+div.sideboxtop {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 25px;
+}
+
+p.sideboxtop {
+    margin: 0;
+    float: left;
+    width: inherit;
+    height: inherit;
+    font-size: 16px;
+}
+
+button.sideboxtop {
+    float: right;
+    height: inherit;
+}
+
+div.sideboxcontent {
+    font-size: 16px;
+    width: 80%;
+    margin: auto;
+    height: 300px;
+}
+
+p.sideboxcontent {
+    margin: 0;
+}
+
+.sideboxparent {
+    font-size: 0;
+    margin: auto;
+}

@@ -1,18 +1,13 @@
 html {
-    margin: 0px;
-    padding: 0px;
+
 }
 
 body {
     background-color: black;
-    margin: 0px;
-    padding: 0px;
 }
 
 #content > p {
     color: white;
-    padding-left: 10px;
-    font-family: sans-serif;
 }
 
 label {
@@ -21,29 +16,16 @@ label {
 
 #page_top {
     background-color: #111111;
-    height: 100px;
 }
 
 #page_top > h1 {
-    margin-top: 0px;
     color: white;
-    font-size: 60px;
-    font-family: sans-serif;
-    line-height: 100px;
-    text-align: center;
 }
 
 #page_options_list > li {
-    display: inline-block;
-    text-align: center;
-    padding: 4px;
-    font-size: 30px;
-    font-family: sans-serif;
     color: white;
     background-color: #333333;
-    border-radius: 20px;
     border: 2px solid white;
-    width: 300px;
 }
 
 #page_options_list > li:hover {
@@ -51,37 +33,19 @@ label {
 }
 
 #page_options_list li a {
-    margin: 0px;
-    display: block;
     color: white;
-    text-decoration: none;
-    width: 100%;
-    height: 100%;
 }
 
 #page_content {
-    min-height: 600px;
-    display: flex;
     border: 5px solid #555555;
-    box-sizing: content-box;
 }
 
 #content {
-    min-height: inherit;
-    height: inherit;
-    width: 70%;
     border: 5px solid #555555;
-    box-sizing: border-box;
-    float: left;
 }
 
 #sidebar {
-    min-height: inherit;
-    height: inherit;
-    width: 30%;
     border: 5px solid #555555;
-    box-sizing: border-box;
-    float: left;
 }
 
 .sidebox > p {
@@ -89,16 +53,9 @@ label {
 }
 
 #page_bottom_list > li {
-    display: inline-block;
-    text-align: center;
-    padding: 2px;
-    font-size: 15px;
-    font-family: sans-serif;
     color: white;
     background-color: #333333;
-    border-radius: 10px;
     border: 2px solid white;
-    width: 100px;
 }
 
 #page_bottom_list > li:hover {
@@ -106,12 +63,7 @@ label {
 }
 
 #page_bottom_list li a {
-    margin: 0px;
-    display: block;
     color: white;
-    text-decoration: none;
-    width: 100%;
-    height: 100%;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -119,28 +71,16 @@ label {
 /* ---------------------------------------------------------------------- */
 
 #story_selector {
-    width: 75%;
-    margin: 5px auto;
-    height: 300px;
-    display: table;
+
 }
 
 #story_selector > a {
-    display: table-cell;
-    width: 25%;
-    height: inherit;
-    text-decoration: none;
+
 }
 
 div.story_option {
-    display: table-cell;
     border: 3px solid #484848;
     background-color: #1e1e1e;
-    box-sizing: border-box;
-    text-align: center;
-    width: inherit;
-    height: inherit;
-    overflow: hidden;
 }
 
 div.story_option:hover {
@@ -151,18 +91,13 @@ div.story_option:hover {
 
 div.story_option > h4 {
     color: white;
-    font-family: sans-serif;
 }
 
 div.story_option > p {
     color: white;
-    font-family: sans-serif;
 }
 
 div.story_option > div {
-    width: 80%;
-    height: 50%;
-    margin: 0 auto;
     background-image: radial-gradient(black, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
 }
 
@@ -175,42 +110,25 @@ div.story_option:hover > div {
 /* ---------------------------------------------------------------------- */
 
 div.sideboxtop {
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    height: 25px;
     background-color: #a3a3a3;
 }
 
 p.sideboxtop {
-    margin: 0;
-    float: left;
-    width: inherit;
-    height: inherit;
     color: black;
-    font-size: 16px;
 }
 
 button.sideboxtop {
-    float: right;
-    height: inherit;
     background-color: inherit;
 }
 
 div.sideboxcontent {
-    font-size: 16px;
-    width: 80%;
-    margin: auto;
-    height: 300px;
     background-color: #484848;
 }
 
 p.sideboxcontent {
-    margin: 0;
     color: white;
 }
 
 .sideboxparent {
-    font-size: 0;
-    margin: auto;
+    
 }
