@@ -1,15 +1,17 @@
 package org.tt.indproj;
 
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 
-import java.util.ArrayList;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.tt.indproj.database_operators.DBBroker;
 import org.tt.indproj.utilities.FileReader;
@@ -20,7 +22,7 @@ import org.tt.indproj.utilities.FileReader;
  * @author terratenff
  */
 @Controller
-@RequestMapping("")
+@RequestMapping(value = "")
 public class BaseController {
 	
 	private static Logger logger = LoggerFactory.getLogger(BaseController.class);
@@ -43,8 +45,21 @@ public class BaseController {
      * View-function for the home page.
      */
     @RequestMapping(HOME)
-    public ModelAndView index() {
+    public ModelAndView index(
+    		@CookieValue(value = "darkmode", defaultValue = "notfound") String cookie,
+    		@CookieValue(value = "story", defaultValue = "nothere") String cookie2,
+    		HttpServletRequest request) {
     	logger.info("Navigated to '" + HOME + "'.");
+    	logger.info("COOKIE: " + cookie);
+    	logger.info("COOKIE2: " + cookie2);
+    	
+    	Cookie[] cookies = request.getCookies();
+    	if (cookies != null) {
+    		for (Cookie cookielist : request.getCookies()) {
+        		logger.info("LIST COOKIE: " + cookielist.getName());
+        	}
+    	}
+
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
@@ -60,9 +75,10 @@ public class BaseController {
      * View-function for the story selection page.
      */
     @RequestMapping(STORY)
-    public ModelAndView storySelection() {
+    public ModelAndView storySelection(HttpServletResponse response) {
     	logger.info("Navigated to '" + STORY + "'.");
         // TODO
+    	response.addCookie(new Cookie("story", "hello"));
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
         String[] contents = FileReader.getParagraphs("story_selection.txt");
@@ -201,16 +217,16 @@ public class BaseController {
      * View-function for authentication purposes.
      */
     @RequestMapping(value = LOGIN, method = RequestMethod.POST)
-    public ModelAndView loginPost(@RequestParam("username") String username,
-    		@RequestParam("pwd") String password) {
+    public ModelAndView loginPost(final HttpServletRequest request,
+    		@RequestParam("username") final String username,
+    		@RequestParam("pwd") final String password) {
     	logger.info("Navigated to '" + LOGIN + "'. An attempt to log in was made.");
-        // TODO: User Authentication.
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
-        //DBBroker.createDatabase();
-        System.out.println("HEY");
-        System.out.println(username);
-        System.out.println(password);
+        logger.info("User inputs:");
+        logger.info(username);
+        logger.info(password);
         return mav;
     }
     
@@ -223,7 +239,7 @@ public class BaseController {
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
-        //DBBroker.createDatabase();
+        
         return mav;
     }
 }
