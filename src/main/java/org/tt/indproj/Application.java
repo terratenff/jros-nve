@@ -21,12 +21,8 @@ public class Application implements CommandLineRunner {
 		if (args.length == 0) {
 			logger.info("No args provided. Default configurations are used.");
 		} else {
-			logger.info("The following args have been recognized:");
-			for (String arg : args) {
-				logger.info(arg);
-			}
-			logger.info("Configurations are now as follows:");
-			logger.info("TODO");
+			logger.info("Interpreting provided args...");
+			ParamReader.configureApplication(args);
 		}
 	}
 }

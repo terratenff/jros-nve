@@ -8,15 +8,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Acts as a collection of functions related to database management.
  * @author terratenff
  */
 public class DBOperations {
+	
+	private static Logger logger = LoggerFactory.getLogger(DBOperations.class);
     /**
      * All information is stored on the database file "textdata.db".
      */
-    private static final String URL = "jdbc:sqlite:textdata.db";
+    private static final String URL = "jdbc:sqlite:appdata.db";
 
     /**
      * Attempts to create a connection to the database.
@@ -28,13 +33,13 @@ public class DBOperations {
 		try {
             Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection(URL);
-			System.out.println("- DBOperations: Connection established -");
+			logger.info("Connection to 'appdata.db' established");
         } catch (ClassNotFoundException e) {
-            System.out.println("- DBOperations: Error (ClassNotFoundException) occurred while establishing connection -");
-			System.out.println(e.getMessage());
+            logger.info("ClassNotFoundException occurred while establishing connection:");
+			logger.info(e.getMessage());
 		} catch (SQLException e) {
-			System.out.println("- DBOperations: Error (SQLException) occurred while establishing connection -");
-			System.out.println(e.getMessage());
+			logger.info("SQLException occurred while establishing connection:");
+			logger.info(e.getMessage());
 		}
 		return conn;
 	}
@@ -48,12 +53,12 @@ public class DBOperations {
 		try {
 			if (conn != null) {
 				conn.close();
-				System.out.println("- DBOperations: Connection closed -");
+				logger.info("Connection to 'appdata.db' has been closed.");
 			}
 			return true;
 		} catch (SQLException e) {
-			System.out.println("- DBOperations: Error occurred while closing connection -");
-			System.out.println(e.getMessage());
+			logger.info("SQLException occurred while closing connection:");
+			logger.info(e.getMessage());
 			return false;
 		}
 	}
@@ -62,8 +67,8 @@ public class DBOperations {
      * Searches the database for any IDs that have remained unused.
      * @return ID-integer that is both the lowest and unused.
      */
-    static int findUnusedID() {
-		String query = "SELECT id FROM user";
+    static int findUnusedID(String tableName) {
+		String query = "SELECT id FROM " + tableName;
 		int chosenId = 0;
 		Connection conn = null;
 		try {
@@ -97,7 +102,7 @@ public class DBOperations {
 			}
 			chosenId = i;
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 			chosenId = -1;
 		} finally {
 			terminateConnection(conn);
