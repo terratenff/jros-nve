@@ -43,4 +43,28 @@ public class DBBroker {
     	//int likeInt = like ? 1 : 0;
     	//int flagInt = flag ? 1 : 0;
     }
+    
+    public static void updateUser(IUser user) {
+    	// TODO
+    }
+    
+    public static void updateStory(IStory story) {
+    	// TODO
+    }
+    
+    public static void updateRating(IRating rating) {
+    	// TODO
+    }
+    
+    public static void deleteUser(IUser user) {
+    	// TODO
+    }
+    
+    public static void deleteStory(IStory story) {
+    	// TODO
+    }
+    
+    public static void deleteRating(IRating rating) {
+    	// TODO
+    }
 }

@@ -13,7 +13,6 @@ public class Application implements CommandLineRunner {
 	
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        logger.info("Application has finished its initializations.");
     }
 
 	@Override
@@ -22,7 +21,7 @@ public class Application implements CommandLineRunner {
 			logger.info("No args provided. Default configurations are used.");
 		} else {
 			logger.info("Interpreting provided args...");
-			ParamReader.configureApplication(args);
 		}
+		ParamReader.configureApplication(args);
 	}
 }

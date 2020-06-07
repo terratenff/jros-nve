@@ -1,4 +1,4 @@
-package org.tt.indproj;
+package org.tt.indproj.controllers;
 
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
