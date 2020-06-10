@@ -16,17 +16,21 @@ import org.slf4j.LoggerFactory;
  */
 class DBEstablisher {
 	
+	/**
+	 * Writes down information relating to database initializations.
+	 */
 	private static Logger logger = LoggerFactory.getLogger(DBEstablisher.class);
 	
     /**
      * Creates the primary database table, "puretext", that is set
      * to contain the story entries.
      */
-    static void createDatabase() {
+    static void createDatabase(boolean discreet) {
     	File database = new File("appdata.db");
     	if (database.exists()) {
-    		logger.info("Database file currently exists.");
-    		logger.info("A crash may occur if it is not formatted properly.");
+    		if (!discreet) {
+    			logger.info("Database file currently exists.");
+    		}
     	}
     	else {
     		logger.info("Proceeding to create application database...");
@@ -34,24 +38,30 @@ class DBEstablisher {
     	}
     }
     
+    /**
+     * Deletes application database and creates it again from scratch.
+     */
     static void resetDatabase() {
     	try {
     		File file = new File("appdata.db");
 			boolean outcome = Files.deleteIfExists(file.toPath());
 			if (outcome) logger.info("Database reset was successful!");
 			else logger.info("Database did not exist.");
-			createDatabase();
+			createDatabase(false);
 		} catch (IOException e) {
-			logger.info("Database reset was not successful (IOException):");
-			logger.info(e.getMessage());
+			logger.error("Database reset was not successful (IOException):");
+			logger.error(e.getMessage());
 		}
     }
     
+    /**
+     * Deletes all data from application database.
+     */
     static void clearDatabase() {
     	File database = new File("appdata.db");
     	if (!database.exists()) {
     		logger.warn("Database file does not exist.");
-    		createDatabase();
+    		createDatabase(false);
     		return;
     	}
     	
@@ -67,13 +77,17 @@ class DBEstablisher {
             stmt.execute(sql2);
             stmt.execute(sql3);
         } catch (SQLException e) {
-            logger.info("Error while clearing database:");
-            logger.info(e.getMessage());
+            logger.error("Error while clearing database:");
+            logger.error(e.getMessage());
         } finally {
             DBOperations.terminateConnection(conn);
         }
     }
     
+    /**
+     * Initializes application database. The structure of the database is set, and an entry
+     * into the table "people" is made, set to represent people who do not use an account.
+     */
     static void initializeDatabase() {
     	String sql1 = "CREATE TABLE IF NOT EXISTS people (\n"
         		+ "id INTEGER NOT NULL PRIMARY KEY,"
@@ -83,6 +97,8 @@ class DBEstablisher {
         String sql2 = "CREATE TABLE IF NOT EXISTS stories (\n"
         		+ "id INTEGER NOT NULL PRIMARY KEY,"
                 + "makerid INTEGER NOT NULL DEFAULT 0,"
+                + "title VARCHAR(50),"
+                + "creationdate VARCHAR(16)," // 'YYYY-MM-DD HH:MM'
                 + "content TEXT," // Story itself with default prompts.
                 + "prompts TEXT," // CSV: wordIndex;promptId;promptDescription;promptFilled;promptDefault
                 + "FOREIGN KEY(makerid) REFERENCES people(id)\n"
@@ -124,8 +140,8 @@ class DBEstablisher {
             stmt.execute(sql3);
             stmt.execute(sql4);
         } catch (SQLException e) {
-            logger.info("Error while creating database:");
-            logger.info(e.getMessage());
+            logger.error("Error while creating database:");
+            logger.error(e.getMessage());
         } finally {
             DBOperations.terminateConnection(conn);
         }

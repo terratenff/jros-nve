@@ -9,6 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 	
+	/**
+	 * Application logger.
+	 */
 	private static Logger logger = LoggerFactory.getLogger(Application.class);
 	
     public static void main(String[] args) {

@@ -3,10 +3,10 @@ package org.tt.indproj.database_operators;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,11 @@ import org.slf4j.LoggerFactory;
  */
 public class DBOperations {
 	
+	/**
+	 * Writes down information from generic database operations.
+	 */
 	private static Logger logger = LoggerFactory.getLogger(DBOperations.class);
+	
     /**
      * All information is stored on the database file "textdata.db".
      */
@@ -62,51 +66,31 @@ public class DBOperations {
 			return false;
 		}
 	}
-
+    
     /**
-     * Searches the database for any IDs that have remained unused.
-     * @return ID-integer that is both the lowest and unused.
+     * Convenient print function for database result sets.
+     * @param rs ResultSet. <b>Connection to related database must not be closed!</b>
+     * @throws SQLException 
      */
-    static int findUnusedID(String tableName) {
-		String query = "SELECT id FROM " + tableName;
-		int chosenId = 0;
-		Connection conn = null;
-		try {
-			conn = establishConnection();
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			ArrayList<Integer> ids = new ArrayList<Integer>();
-
-            // Collect every ID-integer that is in use.
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				if (!ids.contains(id)) {
-					ids.add(id);
-				}
-			}
-
-            // Sort the collection of IDs to see if there are any gaps.
-			Collections.sort(ids);
-			int i = 0;
-			for (int candidate : ids) {
-				if (candidate != i) {
-                    // There is a gap in the collection: an unused ID
-                    // has been found.
-					break;
-				} else {
-                    // Keep incrementing ID-integer until all of the IDs
-                    // from the collection have been viewed. If no gap could
-                    // be found, the next ID-integer will be used.
-					++i;
-				}
-			}
-			chosenId = i;
-		} catch (SQLException e) {
-			logger.info(e.getMessage());
-			chosenId = -1;
-		} finally {
-			terminateConnection(conn);
-		}
-		return chosenId;
-	}
+    static void printResultSet(ResultSet rs, boolean skipLargeInstances) throws SQLException {
+    	ResultSetMetaData rsmd = rs.getMetaData();
+    	List<String> columns = new ArrayList<String>();
+    	for (int i = 0; i < rsmd.getColumnCount(); i++) {
+    		columns.add(rsmd.getColumnName(i));
+    	}
+    	
+    	String content = "";
+    	int counter = 0;
+    	while (rs.next()) {
+    		logger.info("Entry [" + counter + "]");
+    		for (String column : columns) {
+    			content = rs.getString(column);
+    			if (content.length() > 255 && skipLargeInstances) {
+    				logger.info("- " + column + ": SKIPPED (Too large)");
+    			} else {
+    				logger.info("- " + column + ": " + content);
+    			}
+    		}
+    	}
+    }
 }
