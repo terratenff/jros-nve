@@ -138,8 +138,10 @@ public class ParamReader {
 		
 		List<Table> tableList = new ArrayList<Table>();
 		String[] tableCollection = varCollection.split(" ");
+		
 		for (String tableString : tableCollection) {
 			Table table = getTable(tableString);
+			
 			if (table == Table.NONE) continue;
 			else if (table == Table.ALL) {
 				return Table.getEffectiveTables();
@@ -212,6 +214,7 @@ public class ParamReader {
 		logger.info("function view(table/s) called.");
 		Table[] tableSet = getTables(tables);
 		boolean skipLargeInstances = false;
+		
 		if (tables.toLowerCase().contains("skiplargeinstances")) {
 			skipLargeInstances = true;
 		}
@@ -253,12 +256,14 @@ public class ParamReader {
 		logger.info("function sql(sql) called");
 		String sqlFinal;
 		boolean skipLargeInstances = false;
+		
 		if (sql.toLowerCase().contains("skiplargeinstances")) {
 			skipLargeInstances = true;
 			sqlFinal = sql.replaceAll("skiplargeinstances", "");
 		} else {
 			sqlFinal = sql;
 		}
+		
 		DBBroker.executeSql(sqlFinal, skipLargeInstances);
 	}
 }

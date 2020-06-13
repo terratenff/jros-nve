@@ -26,7 +26,7 @@ class DBModifier {
 	 * @param magicword Password.
 	 */
 	static void insertUser(String username, String magicword) {
-		String sql = "INSERT INTO people (user, magicword) VALUES ('"
+		String sql = "INSERT INTO people (username, magicword) VALUES ('"
 				+ username + "', '" + magicword + "');";
 		
 		Connection conn = null;
@@ -114,7 +114,7 @@ class DBModifier {
 	 */
 	static void updateUser(int id, String username, String magicword) {
 		String sql = "UPDATE people SET\n"
-				+ "user='" + username + "', "
+				+ "username='" + username + "', "
 				+ "magicword='" + magicword + "' WHERE id=" + id + ";";
 		
 		Connection conn = null;

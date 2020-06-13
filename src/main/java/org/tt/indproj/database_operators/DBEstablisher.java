@@ -65,7 +65,7 @@ class DBEstablisher {
     		return;
     	}
     	
-    	String sql1 = "DELETE * FROM people WHERE id != 0";
+    	String sql1 = "DELETE * FROM people";
     	String sql2 = "DELETE * FROM stories";
     	String sql3 = "DELETE * FROM ratings";
     	
@@ -85,30 +85,29 @@ class DBEstablisher {
     }
     
     /**
-     * Initializes application database. The structure of the database is set, and an entry
-     * into the table "people" is made, set to represent people who do not use an account.
+     * Initializes application database.
      */
     static void initializeDatabase() {
     	String sql1 = "CREATE TABLE IF NOT EXISTS people (\n"
         		+ "id INTEGER NOT NULL PRIMARY KEY,"
-                + "user VARCHAR(50),"
+                + "username VARCHAR(50) UNIQUE,"
                 + "magicword VARCHAR(50)"
                 + ");";
         String sql2 = "CREATE TABLE IF NOT EXISTS stories (\n"
         		+ "id INTEGER NOT NULL PRIMARY KEY,"
-                + "makerid INTEGER NOT NULL DEFAULT 0,"
+                + "makerid INTEGER,"
                 + "title VARCHAR(50),"
                 + "creationdate VARCHAR(16)," // 'YYYY-MM-DD HH:MM'
                 + "content TEXT," // Story itself with default prompts.
                 + "prompts TEXT," // CSV: wordIndex;promptId;promptDescription;promptFilled;promptDefault
                 + "FOREIGN KEY(makerid) REFERENCES people(id)\n"
                 + "ON UPDATE CASCADE\n"
-                + "ON DELETE SET DEFAULT"
+                + "ON DELETE SET NULL"
                 + ");";
         String sql3 = "CREATE TABLE IF NOT EXISTS ratings (\n"
         		+ "id INTEGER NOT NULL PRIMARY KEY,"
-                + "makerid INTEGER NOT NULL DEFAULT 0,"
-                + "raterid INTEGER NOT NULL DEFAULT 0,"
+                + "makerid INTEGER,"
+                + "raterid INTEGER,"
                 + "storyid INTEGER NOT NULL,"
                 + "viewdate CHAR(16)," // 'YYYY-MM-DD HH:MM'
                 + "grade INTEGER,"
@@ -118,18 +117,14 @@ class DBEstablisher {
                 + "comment VARCHAR(255),"
                 + "FOREIGN KEY(makerid) REFERENCES people(id)\n"
                 + "ON UPDATE CASCADE\n"
-                + "ON DELETE SET DEFAULT,\n"
+                + "ON DELETE SET NULL,\n"
                 + "FOREIGN KEY(raterid) REFERENCES people(id)\n"
                 + "ON UPDATE CASCADE\n"
-                + "ON DELETE SET DEFAULT,\n"
+                + "ON DELETE SET NULL,\n"
                 + "FOREIGN KEY(storyid) REFERENCES stories(id)\n"
                 + "ON UPDATE CASCADE\n"
                 + "ON DELETE CASCADE"
                 + ");";
-        
-        String sql4 = "INSERT INTO people (user, magicword) VALUES ('The Anonymous Collective', '');";
-        // One is not supposed to log into the application as "The Anonymous Collective".
-        // It is reserved for those users who use the services without an account.
 
         Connection conn = null;
         try {
@@ -138,7 +133,6 @@ class DBEstablisher {
             stmt.execute(sql1);
             stmt.execute(sql2);
             stmt.execute(sql3);
-            stmt.execute(sql4);
         } catch (SQLException e) {
             logger.error("Error while creating database:");
             logger.error(e.getMessage());
