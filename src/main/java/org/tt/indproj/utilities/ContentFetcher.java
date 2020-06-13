@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * in a manageable format.
  * @author terratenff
  */
-public class FileReader {
+public class ContentFetcher {
     /**
      * Default path, from which most text files can be found.
      */

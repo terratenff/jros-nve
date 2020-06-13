@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.tt.indproj.database_operators.DBBroker;
-import org.tt.indproj.utilities.FileReader;
+import org.tt.indproj.utilities.ContentFetcher;
 
 /**
  * The Base Controller, with no initial mapping. One can access the
@@ -63,7 +63,7 @@ public class BaseController {
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
-        String[] contents = FileReader.getParagraphs("index.txt");
+        String[] contents = ContentFetcher.getParagraphs("index.txt");
         mav.addObject("texts", contents);
         mav.addObject("pageContext", 0);
         // mav.addObject("key", value);
@@ -81,7 +81,7 @@ public class BaseController {
     	response.addCookie(new Cookie("story", "hello"));
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
-        String[] contents = FileReader.getParagraphs("story_selection.txt");
+        String[] contents = ContentFetcher.getParagraphs("story_selection.txt");
         mav.addObject("texts", contents);
         mav.addObject("pageContext", 1);
         return mav;
@@ -96,7 +96,7 @@ public class BaseController {
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
-        String[] contents = FileReader.getParagraphs("about.txt");
+        String[] contents = ContentFetcher.getParagraphs("about.txt");
         mav.addObject("texts", contents);
         mav.addObject("pageContext", 2);
         return mav;
@@ -111,7 +111,7 @@ public class BaseController {
         // TODO
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
-        String[] contents = FileReader.getParagraphs("help.txt");
+        String[] contents = ContentFetcher.getParagraphs("help.txt");
         mav.addObject("texts", contents);
         return mav;
     }
