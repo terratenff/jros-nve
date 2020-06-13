@@ -22,8 +22,10 @@ class DBEstablisher {
 	private static Logger logger = LoggerFactory.getLogger(DBEstablisher.class);
 	
     /**
-     * Creates the primary database table, "puretext", that is set
-     * to contain the story entries.
+     * Creates the application database.
+     * @param discreet Deterimnes whether the user should be bothered with
+     * information about the database file existing if an attempt to create
+     * one is made.
      */
     static void createDatabase(boolean discreet) {
     	File database = new File("appdata.db");
