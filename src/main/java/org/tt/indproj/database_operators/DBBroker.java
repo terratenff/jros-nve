@@ -8,8 +8,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.tt.indproj.core.IRating;
 import org.tt.indproj.core.IStory;
 import org.tt.indproj.core.IUser;
@@ -19,11 +17,6 @@ import org.tt.indproj.core.IUser;
  * @author terratenff
  */
 public class DBBroker {
-	
-	/**
-	 * Writes down some notes from general database operations.
-	 */
-	private static Logger logger = LoggerFactory.getLogger(DBBroker.class);
     
 	/**
 	 * Establishes a database for the application to use.
@@ -38,16 +31,21 @@ public class DBBroker {
     }
     
     /**
-     * Inserts a user into the database.
+     * Inserts a user into the database. Also assigns an appropriate ID for it.
      * @param user Target user entity.
      */
     public static void insertUser(IUser user) {
-    	// TODO
-    	//DBModifier.insertUser(username, pwd);
+    	String username = user.getUsername();
+    	String pwd = user.getPassword();
+    	boolean outcome = DBModifier.insertUser(username, pwd);
+    	if (outcome) {
+    		int id = DBReader.getUserId(username);
+    		user.assignId(id);
+    	}
     }
     
     /**
-     * Inserts a story into the database.
+     * Inserts a story into the database. Also assigns an appropriate ID for it.
      * @param story Target story entity.
      */
     public static void insertStory(IStory story) {
@@ -56,7 +54,7 @@ public class DBBroker {
     }
     
     /**
-     * Inserts a rating into the database.
+     * Inserts a rating into the database. Also assigns an appropriate ID for it.
      * @param rating Target rating entity.
      */
     public static void insertRating(IRating rating) {
@@ -186,25 +184,19 @@ public class DBBroker {
     }
     
     /**
-     * Prints (with a logger) the contents of specified database table.
+     * Executes SQL provided by the user.
+     * @param sqlQuery SQL provided by the user, subject to execution.
+     */
+    public static void executeSql(String sqlQuery, boolean skipLargeInstances) {
+    	DBModifier.executeSql(sqlQuery, skipLargeInstances);
+    }
+    
+    /**
+     * Prints the contents of specified database table.
      * @param table Target database table (if it exists).
      */
     public static void viewTable(String table, boolean skipLargeInstances) {
-    	String sql = "SELECT * FROM " + table.toLowerCase();
-    	
-    	Connection conn = null;
-        try {
-            conn = DBOperations.establishConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            logger.info("Table '" + table.toLowerCase() + "' contents:");
-            DBOperations.printResultSet(rs, skipLargeInstances);
-        } catch (SQLException e) {
-        	logger.error("Error while viewing a database table:");
-			logger.error(e.getMessage());
-        } finally {
-            DBOperations.terminateConnection(conn);
-        }
+    	DBReader.viewTable(table, skipLargeInstances);
     }
     
     /**
@@ -213,30 +205,5 @@ public class DBBroker {
      */
     public static void clearTable(String table) {
     	DBModifier.clearTable(table);
-    }
-    
-    /**
-     * Executes SQL provided by the user.
-     * @param sqlQuery SQL provided by the user, subject to execution.
-     */
-    public static void executeSql(String sqlQuery, boolean skipLargeInstances) {
-    	Connection conn = null;
-        try {
-            conn = DBOperations.establishConnection();
-            Statement stmt = conn.createStatement();
-            boolean outcome = stmt.execute(sqlQuery);
-            if (outcome) {
-            	ResultSet rs = stmt.getResultSet();
-            	logger.info("Results from the query:");
-            	DBOperations.printResultSet(rs, skipLargeInstances);
-            } else {
-            	logger.info("SQL query has been completed.");
-            }
-        } catch (SQLException e) {
-        	logger.error("Error while executing a custom sql query:");
-			logger.error(e.getMessage());
-        } finally {
-            DBOperations.terminateConnection(conn);
-        }
     }
 }

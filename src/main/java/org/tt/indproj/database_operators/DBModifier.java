@@ -1,6 +1,7 @@
 package org.tt.indproj.database_operators;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -24,10 +25,12 @@ class DBModifier {
 	 * Inserts a user into database table "people".
 	 * @param username Target username.
 	 * @param magicword Password.
+	 * @return Outcome of the operation.
 	 */
-	static void insertUser(String username, String magicword) {
+	static boolean insertUser(String username, String magicword) {
 		String sql = "INSERT INTO people (username, magicword) VALUES ('"
 				+ username + "', '" + magicword + "');";
+		boolean outcome;
 		
 		Connection conn = null;
         try {
@@ -35,12 +38,15 @@ class DBModifier {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             logger.info("A new user that goes by '" + username + "' has been added to the database.");
+            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while inserting a user into the database:");
             logger.error(e.getMessage());
+            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
+        return outcome;
 	}
 	
 	/**
@@ -51,10 +57,12 @@ class DBModifier {
 	 * @param content Main content of the story, with default prompts.
 	 * @param promptMap Prompt-related information. CSV Format is as follows:<br>
 	 * wordIndex;promptId;promptDescription;promptFilled;promptDefault
+	 * @return Outcome of the operation.
 	 */
-	static void insertStory(int makerId, String title, String creationDate, String content, String promptMap) {
+	static boolean insertStory(int makerId, String title, String creationDate, String content, String promptMap) {
 		String sql = "INSERT INTO stories (makerid, title, creationdate, content, prompts) VALUES ("
 				+ makerId + ", '" + title + "', '" + creationDate + "', '" + content + ", '" + promptMap + "');";
+		boolean outcome;
 		
 		Connection conn = null;
         try {
@@ -62,12 +70,15 @@ class DBModifier {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             logger.info("A new story titled' " + "' has been added to the database.");
+            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while inserting a story into the database:");
             logger.error(e.getMessage());
+            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
+        return outcome;
 	}
 	
 	/**
@@ -82,8 +93,9 @@ class DBModifier {
 	 * @param liketype Flag for the specifics of why the rater liked the story.
 	 * @param flag Flag for whether the rater thinks that the story violates service rules.
 	 * @param comment Text for the rater to provide more context for the rating.
+	 * @return Outcome of the operation.
 	 */
-	static void insertRating(int makerId, int raterId, int storyId,
+	static boolean insertRating(int makerId, int raterId, int storyId,
 			String viewdate, int grade, int like, int liketype,
 			int flag, String comment) {
 		String sql = "INSERT INTO ratings (makerid, raterid, storyid,"
@@ -91,6 +103,7 @@ class DBModifier {
 				+  makerId + ", " + raterId + ", " + storyId + ", '"
 				+ viewdate + "', " + grade + ", " + like + ", " + liketype + ", "
 				+ flag + ", '" + comment + "');";
+		boolean outcome;
 		
 		Connection conn = null;
         try {
@@ -98,12 +111,15 @@ class DBModifier {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             logger.info("A new rating has been added to the database.");
+            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while inserting a rating into the database:");
             logger.error(e.getMessage());
+            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
+        return outcome;
 	}
 	
 	/**
@@ -111,11 +127,13 @@ class DBModifier {
 	 * @param id ID of target user.
 	 * @param username New username.
 	 * @param magicword New password.
+	 * @return Outcome of the operation.
 	 */
-	static void updateUser(int id, String username, String magicword) {
+	static boolean updateUser(int id, String username, String magicword) {
 		String sql = "UPDATE people SET\n"
 				+ "username='" + username + "', "
 				+ "magicword='" + magicword + "' WHERE id=" + id + ";";
+		boolean outcome;
 		
 		Connection conn = null;
         try {
@@ -123,12 +141,15 @@ class DBModifier {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             logger.info("User of id " + id + " has been updated.");
+            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while updating a user in the database:");
             logger.error(e.getMessage());
+            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
+        return outcome;
 	}
 	
 	/**
@@ -140,14 +161,16 @@ class DBModifier {
 	 * @param content Main content of the story, with default prompts.
 	 * @param promptMap Prompt-related information. CSV Format is as follows:<br>
 	 * wordIndex;promptId;promptDescription;promptFilled;promptDefault
+	 * @return Outcome of the operation.
 	 */
-	static void updateStory(int id, int makerId, String title, String creationDate, String content, String promptMap) {
+	static boolean updateStory(int id, int makerId, String title, String creationDate, String content, String promptMap) {
 		String sql = "UPDATE stories SET\n"
 				+ "makerid=" + makerId + ", "
 				+ "title='" + title + "', "
 				+ "creationdate='" + creationDate + "', "
 				+ "content='" + content + "', "
 				+ "prompts='" + promptMap + "' WHERE id=" + id + ";";
+		boolean outcome;
 		
 		Connection conn = null;
         try {
@@ -155,12 +178,15 @@ class DBModifier {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             logger.info("Story of id " + id + " has been updated.");
+            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while updating a story in the database:");
             logger.error(e.getMessage());
+            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
+        return outcome;
 	}
 	
 	/**
@@ -176,8 +202,9 @@ class DBModifier {
 	 * @param liketype Flag for the specifics of why the rater liked the story.
 	 * @param flag Flag for whether the rater thinks that the story violates service rules.
 	 * @param comment Text for the rater to provide more context for the rating.
+	 * @return Outcome of the operation.
 	 */
-	static void updateRating(int id, int makerId, int raterId, int storyId,
+	static boolean updateRating(int id, int makerId, int raterId, int storyId,
 			String viewdate, int grade, int like, int liketype,
 			int flag, String comment) {
 		String sql = "UPDATE ratings SET\n"
@@ -190,6 +217,7 @@ class DBModifier {
 				+ "liketype=" + liketype + ", "
 				+ "flag=" + flag + ", "
 				+ "comment='" + comment + "' WHERE id=" + id + ";";
+		boolean outcome;
 		
 		Connection conn = null;
         try {
@@ -197,20 +225,25 @@ class DBModifier {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             logger.info("Rating of id " + id + " has been updated.");
+            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while updating a rating in the database:");
             logger.error(e.getMessage());
+            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
+        return outcome;
 	}
 	
 	/**
 	 * Deletes the user of specified ID from the database.
 	 * @param userId ID of user to be deleted.
+	 * @return Outcome of the operation.
 	 */
-	static void deleteUser(int userId) {
+	static boolean deleteUser(int userId) {
 		String sql = "DELETE * FROM people WHERE id=" + userId + ";";
+		boolean outcome;
 		
 		Connection conn = null;
         try {
@@ -218,20 +251,25 @@ class DBModifier {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             logger.info("User of id " + userId + " has been deleted.");
+            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while deleting a user from the database:");
             logger.error(e.getMessage());
+            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
+        return outcome;
 	}
 	
 	/**
 	 * Deletes the story of specified ID from the database.
 	 * @param storyId ID of story to be deleted.
+	 * @return Outcome of the operation.
 	 */
-	static void deleteStory(int storyId) {
+	static boolean deleteStory(int storyId) {
 		String sql = "DELETE * FROM stories WHERE id=" + storyId + ";";
+		boolean outcome;
 		
 		Connection conn = null;
         try {
@@ -239,20 +277,25 @@ class DBModifier {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             logger.info("Story of id " + storyId + " has been deleted.");
+            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while deleting a story from the database:");
             logger.error(e.getMessage());
+            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
+        return outcome;
 	}
 	
 	/**
 	 * Deletes the rating of specified ID from the database.
 	 * @param ratingId ID of rating to be deleted.
+	 * @return Outcome of the operation.
 	 */
-	static void deleteRating(int ratingId) {
+	static boolean deleteRating(int ratingId) {
 		String sql = "DELETE * FROM ratings WHERE id=" + ratingId + ";";
+		boolean outcome;
 		
 		Connection conn = null;
         try {
@@ -260,20 +303,25 @@ class DBModifier {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             logger.info("Rating of id " + ratingId + " has been deleted.");
+            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while deleting a rating from the database:");
             logger.error(e.getMessage());
+            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
+        return outcome;
 	}
 	
 	/**
 	 * Clears all data from specified database table.
 	 * @param table Table from which data should be deleted.
+	 * @return Outcome of the operation.
 	 */
-	static void clearTable(String table) {
+	static boolean clearTable(String table) {
     	String sql = "DELETE * FROM " + table.toLowerCase();
+    	boolean outcome;
     	
     	Connection conn = null;
         try {
@@ -281,11 +329,44 @@ class DBModifier {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             logger.info("Data from table '" + table.toLowerCase() + "' has been deleted.");
+            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while clearing a database table:");
             logger.error(e.getMessage());
+            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
+        return outcome;
+    }
+	
+	/**
+     * Executes SQL provided by the user.
+     * @param sqlQuery SQL provided by the user, subject to execution.
+     * @return Outcome of the operation.
+     */
+    static boolean executeSql(String sqlQuery, boolean skipLargeInstances) {
+    	boolean outcome;
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            boolean result = stmt.execute(sqlQuery);
+            if (result) {
+            	ResultSet rs = stmt.getResultSet();
+            	logger.info("Results from the query:");
+            	DBOperations.printResultSet(rs, skipLargeInstances);
+            } else {
+            	logger.info("SQL query has been completed.");
+            }
+            outcome = true;
+        } catch (SQLException e) {
+        	logger.error("Error while executing a custom sql query:");
+			logger.error(e.getMessage());
+			outcome = false;
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
+        return outcome;
     }
 }

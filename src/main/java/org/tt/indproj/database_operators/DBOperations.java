@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * Acts as a collection of functions related to database management.
  * @author terratenff
  */
-public class DBOperations {
+class DBOperations {
 	
 	/**
 	 * Writes down information from generic database operations.
