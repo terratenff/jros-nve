@@ -27,7 +27,7 @@ class DBModifier {
 	 * @param magicword Password.
 	 * @return Outcome of the operation.
 	 */
-	static boolean insertUser(String username, String magicword) {
+	static synchronized boolean insertUser(String username, String magicword) {
 		String sql = "INSERT INTO people (username, magicword) VALUES ('"
 				+ username + "', '" + magicword + "');";
 		boolean outcome;
@@ -59,7 +59,7 @@ class DBModifier {
 	 * wordIndex;promptId;promptDescription;promptFilled;promptDefault
 	 * @return Outcome of the operation.
 	 */
-	static boolean insertStory(int makerId, String title, String creationDate, String content, String promptMap) {
+	static synchronized boolean insertStory(int makerId, String title, String creationDate, String content, String promptMap) {
 		String sql = "INSERT INTO stories (makerid, title, creationdate, content, prompts) VALUES ("
 				+ makerId + ", '" + title + "', '" + creationDate + "', '" + content + ", '" + promptMap + "');";
 		boolean outcome;
@@ -95,7 +95,7 @@ class DBModifier {
 	 * @param comment Text for the rater to provide more context for the rating.
 	 * @return Outcome of the operation.
 	 */
-	static boolean insertRating(int makerId, int raterId, int storyId,
+	static synchronized boolean insertRating(int makerId, int raterId, int storyId,
 			String viewdate, int grade, int like, int liketype,
 			int flag, String comment) {
 		String sql = "INSERT INTO ratings (makerid, raterid, storyid,"
@@ -129,7 +129,7 @@ class DBModifier {
 	 * @param magicword New password.
 	 * @return Outcome of the operation.
 	 */
-	static boolean updateUser(int id, String username, String magicword) {
+	static synchronized boolean updateUser(int id, String username, String magicword) {
 		String sql = "UPDATE people SET\n"
 				+ "username='" + username + "', "
 				+ "magicword='" + magicword + "' WHERE id=" + id + ";";
@@ -163,7 +163,7 @@ class DBModifier {
 	 * wordIndex;promptId;promptDescription;promptFilled;promptDefault
 	 * @return Outcome of the operation.
 	 */
-	static boolean updateStory(int id, int makerId, String title, String creationDate, String content, String promptMap) {
+	static synchronized boolean updateStory(int id, int makerId, String title, String creationDate, String content, String promptMap) {
 		String sql = "UPDATE stories SET\n"
 				+ "makerid=" + makerId + ", "
 				+ "title='" + title + "', "
@@ -204,7 +204,7 @@ class DBModifier {
 	 * @param comment Text for the rater to provide more context for the rating.
 	 * @return Outcome of the operation.
 	 */
-	static boolean updateRating(int id, int makerId, int raterId, int storyId,
+	static synchronized boolean updateRating(int id, int makerId, int raterId, int storyId,
 			String viewdate, int grade, int like, int liketype,
 			int flag, String comment) {
 		String sql = "UPDATE ratings SET\n"
@@ -241,7 +241,7 @@ class DBModifier {
 	 * @param userId ID of user to be deleted.
 	 * @return Outcome of the operation.
 	 */
-	static boolean deleteUser(int userId) {
+	static synchronized boolean deleteUser(int userId) {
 		String sql = "DELETE * FROM people WHERE id=" + userId + ";";
 		boolean outcome;
 		
@@ -267,7 +267,7 @@ class DBModifier {
 	 * @param storyId ID of story to be deleted.
 	 * @return Outcome of the operation.
 	 */
-	static boolean deleteStory(int storyId) {
+	static synchronized boolean deleteStory(int storyId) {
 		String sql = "DELETE * FROM stories WHERE id=" + storyId + ";";
 		boolean outcome;
 		
@@ -293,7 +293,7 @@ class DBModifier {
 	 * @param ratingId ID of rating to be deleted.
 	 * @return Outcome of the operation.
 	 */
-	static boolean deleteRating(int ratingId) {
+	static synchronized boolean deleteRating(int ratingId) {
 		String sql = "DELETE * FROM ratings WHERE id=" + ratingId + ";";
 		boolean outcome;
 		
@@ -319,7 +319,7 @@ class DBModifier {
 	 * @param table Table from which data should be deleted.
 	 * @return Outcome of the operation.
 	 */
-	static boolean clearTable(String table) {
+	static synchronized boolean clearTable(String table) {
     	String sql = "DELETE * FROM " + table.toLowerCase();
     	boolean outcome;
     	
@@ -345,7 +345,7 @@ class DBModifier {
      * @param sqlQuery SQL provided by the user, subject to execution.
      * @return Outcome of the operation.
      */
-    static boolean executeSql(String sqlQuery, boolean skipLargeInstances) {
+    static synchronized boolean executeSql(String sqlQuery, boolean skipLargeInstances) {
     	boolean outcome;
     	Connection conn = null;
         try {

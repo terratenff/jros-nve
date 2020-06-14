@@ -2,17 +2,57 @@ package org.tt.indproj.database_operators;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.tt.indproj.core.IRating;
 import org.tt.indproj.core.IStory;
 import org.tt.indproj.core.IUser;
+import org.tt.indproj.core.user.UserManager;
+import org.tt.indproj.core.story.StoryManager;
+import org.tt.indproj.core.rating.RatingManager;
 
 /**
  * Makeshift API for database operations.
  * @author terratenff
  */
 public class DBBroker {
+	
+	/**
+	 * Temporary container for a singular user.
+	 * Used in conjunction with a Consumer-callback function.
+	 */
+	private static IUser userTemp;
+	
+	/**
+	 * Temporary container for a singular story.
+	 * Used in conjunction with a Consumer-callback function.
+	 */
+	private static IStory storyTemp;
+	
+	/**
+	 * Temporary container for a singular rating.
+	 * Used in conjunction with a Consumer-callback function.
+	 */
+	private static IRating ratingTemp;
+	
+	/**
+	 * Temporary container for a list of users.
+	 * Used in conjunction with a Consumer-callback function.
+	 */
+	private static List<IUser> userListTemp = new ArrayList<IUser>();
+	
+	/**
+	 * Temporary container for a list of stories.
+	 * Used in conjunction with a Consumer-callback function.
+	 */
+	private static List<IStory> storyListTemp = new ArrayList<IStory>();
+	
+	/**
+	 * Temporary container for a list of ratings.
+	 * Used in conjunction with a Consumer-callback function.
+	 */
+	private static List<IRating> ratingListTemp = new ArrayList<IRating>();
     
 	/**
 	 * Establishes a database for the application to use.
@@ -67,7 +107,10 @@ public class DBBroker {
      * @param user Target user entity that the database is to match.
      */
     public static void updateUser(IUser user) {
-    	// TODO
+    	int id = user.getId();
+    	String username = user.getUsername();
+    	String pwd = user.getPassword();
+    	DBModifier.updateUser(id, username, pwd);
     }
     
     /**
@@ -91,7 +134,8 @@ public class DBBroker {
      * @param user Target user subject to removal.
      */
     public static void deleteUser(IUser user) {
-    	// TODO
+    	int id = user.getId();
+    	DBModifier.deleteUser(id);
     }
     
     /**
@@ -115,9 +159,11 @@ public class DBBroker {
      * @param id ID of target user.
      * @return User instance with matching ID, or null.
      */
-    public static IUser getUser(int id) {
-    	// TODO
-    	return null;
+    public synchronized static IUser getUser(int id) {
+    	DBReader.processUser(id, rs -> {
+    		userTemp = UserManager.createUser(rs);
+    	});
+    	return userTemp;
     }
     
     /**
@@ -125,9 +171,9 @@ public class DBBroker {
      * @param id ID of target story.
      * @return Story instance with matching ID, or null.
      */
-    public static IStory getStory(int id) {
+    public synchronized static IStory getStory(int id) {
     	// TODO
-    	return null;
+    	return storyTemp;
     }
     
     /**
@@ -135,48 +181,53 @@ public class DBBroker {
      * @param id ID of target rating.
      * @return Rating instance with matching ID, or null.
      */
-    public static IRating getRating(int id) {
+    public synchronized static IRating getRating(int id) {
     	// TODO
-    	return null;
+    	return ratingTemp;
     }
     
     /**
      * Selects every user from the database.
      * @return List of every user from the database.
      */
-    public static List<IUser> getUsers() {
-    	// TODO
-    	return null;
+    public synchronized static List<IUser> getUsers() {
+    	userListTemp.clear();
+    	DBReader.processUsers(rs -> {
+    		userListTemp.add(UserManager.createUser(rs));
+    	});
+    	return userListTemp;
     }
     
     /**
      * Selects every story from the database.
      * @return List of every story from the database.
      */
-    public static List<IStory> getStories() {
+    public synchronized static List<IStory> getStories() {
     	// TODO
-    	return null;
+    	return storyListTemp;
     }
     
     /**
      * Selects every rating from the database.
      * @return List of every rating from the database.
      */
-    public static List<IRating> getRatings() {
+    public synchronized static List<IRating> getRatings() {
     	// TODO
-    	return null;
+    	return ratingListTemp;
     }
     
     /**
      * Attempts to perform a login of specified user.
      * @param username Username put in by the user.
      * @param password Password put in by the user.
-     * @return An instance of a user if the login was successful. A null object is
-     * given upon a failure.
+     * @return Instance of the user if login was successful. null object
+     * is given if login failed.
      */
     public static IUser login(String username, String password) {
-    	// TODO
-    	return null;
+    	int outcome = DBReader.login(username, password);
+    	if (outcome >= 0) {
+    		return getUser(outcome);
+    	} else return null;
     }
     
     /**

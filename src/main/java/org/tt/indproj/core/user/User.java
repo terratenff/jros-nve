@@ -1,5 +1,10 @@
 package org.tt.indproj.core.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.tt.indproj.core.IRating;
+import org.tt.indproj.core.IStory;
 import org.tt.indproj.core.IUser;
 
 /**
@@ -23,6 +28,9 @@ abstract class User implements IUser {
 	 * User Password.
 	 */
 	private String password;
+	
+	private List<IStory> stories = new ArrayList<IStory>();
+	private List<IRating> ratings = new ArrayList<IRating>();
 	
 	/**
 	 * Setter for user ID.
@@ -74,6 +82,28 @@ abstract class User implements IUser {
 	 */
 	String getMagicWord() {
 		return password;
+	}
+	
+	@Override
+	public List<IStory> getAssociatedStories() {
+		return stories;
+	}
+	
+	@Override
+	public List<IRating> getAssociatedRatings() {
+		return ratings;
+	}
+	
+	@Override
+	public void setAssociatedStories(List<IStory> stories) {
+		this.stories.clear();
+		this.stories = stories; // TODO: Select ones with matching IDs.
+	}
+	
+	@Override
+	public void setAssociatedRatings(List<IRating> ratings) {
+		this.ratings.clear();
+		this.ratings = ratings; // TODO: Select ones with matching IDs.
 	}
 	
 	@Override

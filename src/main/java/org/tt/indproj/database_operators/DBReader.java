@@ -4,10 +4,17 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Set of database operations that concern mostly just reading from
+ * the database.
+ * @author terratenff
+ *
+ */
 class DBReader {
 	
 	/**
@@ -89,5 +96,94 @@ class DBReader {
         }
         if (id == -1) logger.error("Entry with username '" + username + "' could not be found.");
         return id;
+    }
+    
+    /**
+     * Attempts user authorization.
+     * @param username Username input by user.
+     * @param password Password input by user.
+     * @return ID of the user if authorization was successful. -1 if authroization
+     * failed (nonexistent username, invalid password, exception).
+     */
+    static int login(String username, String password) {
+    	String sql = "SELECT id, magicword FROM people WHERE username='" + username + "'";
+    	int outcome = -1;
+    	
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            boolean discovery = false;
+            while (rs.next()) {
+            	discovery = true;
+            	if (password.equals(rs.getString("magicword"))) {
+            		logger.info("Authorization succeeded!");
+            		outcome = rs.getInt("id");
+            		break;
+            	} else {
+            		logger.error("Authorization failed: invalid password.");
+            		outcome = -1;
+            		break;
+            	}
+            }
+            if (!discovery) {
+            	logger.error("Authorization failed: nonexistent username");
+            }
+        } catch (SQLException e) {
+        	logger.error("Error while authorizing a specific user:");
+			logger.error(e.getMessage());
+			outcome = -1;
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
+        return outcome;
+    }
+    
+    /**
+     * Collects an individual user from the database.
+     * @param id ID of the user.
+     * @param callback Action that is taken with the ResultSet containing
+     * the user.
+     */
+    synchronized static void processUser(int id, Consumer<ResultSet> callback) {
+    	String sql = "SELECT * FROM people WHERE id=" + id;
+    	
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            callback.accept(rs);
+        } catch (SQLException e) {
+        	logger.error("Error while processing a specific user:");
+			logger.error(e.getMessage());
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
+    }
+    
+    /**
+     * Collects every logged user from the database.
+     * @param callback Action that is taken with the ResultSet containing
+     * the users.
+     */
+    synchronized static void processUsers(Consumer<ResultSet> callback) {
+    	String sql = "SELECT * FROM people";
+    	
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+            	callback.accept(rs);
+            }
+        } catch (SQLException e) {
+        	logger.error("Error while processing every user:");
+			logger.error(e.getMessage());
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
     }
 }
