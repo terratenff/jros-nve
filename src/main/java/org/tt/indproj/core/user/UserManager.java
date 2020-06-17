@@ -29,6 +29,9 @@ public class UserManager {
 	 * of being logged out.
 	 */
 	public static IUser getUser(String identifierKey, String identifierValue) {
+		if (identifierKey.isEmpty() || identifierValue.isEmpty()) {
+			return new PrivateUser();
+		}
 		for (IUser user : activeUsers) {
 			String key = user.getIdentifierKey();
 			String value = user.getIdentifierValue();
@@ -67,7 +70,6 @@ public class UserManager {
 	public static IUser createUser(String username, String password) {
 		boolean userExists = DBBroker.userExists(username);
 		if (userExists) {
-			// Oops!
 			return null;
 		}
 		IUser user = new LoggedUser(username, password);

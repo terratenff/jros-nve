@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tt.indproj.utilities.Encryption;
 
 /**
  * Set of database operations that concern mostly just reading from
@@ -106,7 +107,7 @@ class DBReader {
      * failed (nonexistent username, invalid password, exception).
      */
     static int login(String username, String password) {
-    	String sql = "SELECT id, magicword FROM people WHERE username='" + username + "'";
+    	String sql = "SELECT id, magicword, salt FROM people WHERE username='" + username + "'";
     	int outcome = -1;
     	
     	Connection conn = null;
@@ -117,7 +118,8 @@ class DBReader {
             boolean discovery = false;
             while (rs.next()) {
             	discovery = true;
-            	if (password.equals(rs.getString("magicword"))) {
+            	String passwordHash = Encryption.sha256(password + rs.getString("salt"));
+            	if (passwordHash.equals(rs.getString("magicword"))) {
             		logger.info("Authorization succeeded!");
             		outcome = rs.getInt("id");
             		break;

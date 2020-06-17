@@ -13,6 +13,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.tt.indproj.core.IUser;
+import org.tt.indproj.core.user.UserManager;
 import org.tt.indproj.database_operators.DBBroker;
 import org.tt.indproj.utilities.ContentFetcher;
 
@@ -40,18 +42,20 @@ public class BaseController {
     private final String SUPPORT = "/support";
     private final String API = "/api";
     private final String LOGIN = "/login";
+    private final String SIGNUP = "/signup";
+    private final String LOGOUT = "/logout";
 
     /**
      * View-function for the home page.
      */
     @RequestMapping(HOME)
     public ModelAndView index(
+    		@CookieValue(value = "session_id", defaultValue = "") String idKey,
+    		@CookieValue(value = "session_value", defaultValue = "") String idValue,
     		@CookieValue(value = "darkmode", defaultValue = "notfound") String cookie,
     		@CookieValue(value = "story", defaultValue = "nothere") String cookie2,
-    		HttpServletRequest request) {
+    		final HttpServletRequest request) {
     	logger.info("Navigated to '" + HOME + "'.");
-    	logger.info("COOKIE: " + cookie);
-    	logger.info("COOKIE2: " + cookie2);
     	
     	Cookie[] cookies = request.getCookies();
     	if (cookies != null) {
@@ -75,7 +79,7 @@ public class BaseController {
      * View-function for the story selection page.
      */
     @RequestMapping(STORY)
-    public ModelAndView storySelection(HttpServletResponse response) {
+    public ModelAndView storySelection(final HttpServletResponse response) {
     	logger.info("Navigated to '" + STORY + "'.");
         // TODO
     	response.addCookie(new Cookie("story", "hello"));
@@ -219,14 +223,27 @@ public class BaseController {
     @RequestMapping(value = LOGIN, method = RequestMethod.POST)
     public ModelAndView loginPost(final HttpServletRequest request,
     		@RequestParam("username") final String username,
-    		@RequestParam("pwd") final String password) {
+    		@RequestParam("pwd") final String password,
+    		final HttpServletResponse response) {
     	logger.info("Navigated to '" + LOGIN + "'. An attempt to log in was made.");
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
-        logger.info("User inputs:");
-        logger.info(username);
-        logger.info(password);
+        
+        IUser user = DBBroker.login(username, password);
+        if (user == null) {
+        	logger.error("Login failed.");
+        } else {
+        	Cookie cookie1 = new Cookie("session_id", user.getIdentifierKey());
+        	Cookie cookie2 = new Cookie("session_value", user.getIdentifierValue());
+        	cookie1.setMaxAge(-1);
+        	cookie2.setMaxAge(-1);
+        	response.addCookie(cookie1);
+        	response.addCookie(cookie2);
+        }
+        
+        // TODO
+        
         return mav;
     }
     
@@ -237,6 +254,95 @@ public class BaseController {
     public ModelAndView loginGet() {
     	logger.info("Navigated to '" + LOGIN + "'. Login page visited.");
         // TODO
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("index");
+        
+        return mav;
+    }
+    
+    /**
+     * View-function for creating a new account.
+     */
+    @RequestMapping(value = SIGNUP, method = RequestMethod.POST)
+    public ModelAndView signupPost(final HttpServletRequest request,
+    		@RequestParam("username") final String username,
+    		@RequestParam("pwd") final String password,
+    		@RequestParam("pwd_repeat") final String passwordRepeat,
+    		final HttpServletResponse response) {
+    	logger.info("Navigated to '" + SIGNUP + "'. An attempt to create an account was made.");
+        
+    	IUser user;
+    	if (!password.equals(passwordRepeat)) {
+    		logger.error("Passwords do not match!");
+    	} else {
+    		user = UserManager.createUser(username, password);
+        	if (user == null) {
+        		logger.error("Account with username '" + username + "' already exists.");
+        	} else {
+        		DBBroker.insertUser(user); // DBBroker assigns User ID.
+        		if (user.getId() < 0) {
+        			logger.error("User insertion failed. (User ID is negative");
+        		} else {
+        			logger.info("User insertion succeeded. Authorizing user...");
+        			
+        			Cookie cookie1 = new Cookie("session_id", user.getIdentifierKey());
+                	Cookie cookie2 = new Cookie("session_value", user.getIdentifierValue());
+                	cookie1.setMaxAge(-1);
+                	cookie2.setMaxAge(-1);
+                	response.addCookie(cookie1);
+                	response.addCookie(cookie2);
+        			
+        			// TODO
+        		}
+        	}
+    	}
+    	
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("index");
+        return mav;
+    }
+    
+    /**
+     * View-function for creating a new account.
+     */
+    @RequestMapping(value = SIGNUP, method = RequestMethod.GET)
+    public ModelAndView signupGet() {
+    	logger.info("Navigated to '" + SIGNUP + "'. Signup page visited.");
+        // TODO
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("index");
+        
+        return mav;
+    }
+    
+    /**
+     * View-function for creating a new account.
+     */
+    @RequestMapping(value = LOGOUT)
+    public ModelAndView logout(
+    		@CookieValue(value = "session_id", defaultValue = "") String idKey,
+    		@CookieValue(value = "session_value", defaultValue = "") String idValue,
+    		final HttpServletRequest request, final HttpServletResponse response) {
+    	logger.info("Navigated to '" + LOGOUT + "'. An attempt to log out is made.");
+        
+    	IUser user = UserManager.getUser(idKey, idValue);
+    	if (user.getId() > 0) {
+    		Cookie[] cookies = request.getCookies();
+    		if (cookies != null) {
+    			for (Cookie cookie : cookies) {
+    				String name = cookie.getName();
+    				if (name.equals("session_id") || name.equals("session_value")) {
+    					cookie.setValue("");
+    					cookie.setPath("/");
+    					cookie.setMaxAge(0);
+    					response.addCookie(cookie);
+    				}
+    			}
+    		}
+    	} else {
+    		logger.warn("User is already logged out.");
+    	}
+    	
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
         

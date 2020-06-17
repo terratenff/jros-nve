@@ -1,9 +1,10 @@
 'use strict';
 
 /**
- * This is a box that can be hidden, set to contain the means of logging in.
+ * This is a box that can be hidden, set to contain the means of creating
+ * a new account.
  */
-class LoginBox extends React.Component {
+class SignupBox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {visible: false};
@@ -14,7 +15,7 @@ class LoginBox extends React.Component {
             React.createElement(
                 'p',
                 {class: 'sideboxtop'},
-                'Login'
+                'Sign Up'
             ),
             React.createElement(
                 'button',
@@ -29,11 +30,11 @@ class LoginBox extends React.Component {
             React.createElement(
                 'p',
                 {class: 'sideboxcontent'},
-                'Posting stories is possible without logging in, but extra benefits come with an account.'
+                'Create a new account here!'
             ),
             React.createElement(
                 'form',
-                {action: '/login', method: 'post'},
+                {action: '/signup', method: 'post'},
                 React.createElement('label', {for: 'username'}, 'Username'),
                 React.createElement(
                     'input',
@@ -44,7 +45,12 @@ class LoginBox extends React.Component {
                     'input',
                     {type: 'password', id: 'pwd', name: 'pwd'}
                 ),
-                React.createElement('input', {type: 'submit', value: 'Log In'})
+                React.createElement('label', {for: 'pwd_repeat'}, 'Repeat'),
+                React.createElement(
+                    'input',
+                    {type: 'password', id: 'pwd_repeat', name: 'pwd_repeat'}
+                ),
+                React.createElement('input', {type: 'submit', value: 'Create New Account'})
             )
         );
     }
@@ -72,6 +78,6 @@ class LoginBox extends React.Component {
 }
 
 ReactDOM.render(
-    React.createElement(LoginBox),
-    document.querySelector('#box_login')
+    React.createElement(SignupBox),
+    document.querySelector('#box_signup')
 );

@@ -37,13 +37,13 @@ class LoggedUser extends User {
 	
 	/**
 	 * Constructor function for new instances of users.
-	 * @param username
-	 * @param password
+	 * @param username (uniqueness is not checked here).
+	 * @param password (unhashed).
 	 */
 	LoggedUser(String username, String password) {
-		setName(username);
-		setMagicWord(password);
 		setUserSalt(Encryption.generateSalt());
+		setName(username);
+		setMagicWord(Encryption.sha256(password + getUserSalt()));
 		setUserId(-2);
 		
 		identifierKey = Encryption.generateSalt();

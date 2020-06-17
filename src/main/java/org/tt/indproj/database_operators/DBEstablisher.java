@@ -93,7 +93,7 @@ class DBEstablisher {
     	String sql1 = "CREATE TABLE IF NOT EXISTS people (\n"
         		+ "id INTEGER NOT NULL PRIMARY KEY,"
                 + "username VARCHAR(50) UNIQUE,"
-                + "magicword VARCHAR(50),"
+                + "magicword TEXT,"
                 + "salt VARCHAR(255)"
                 + ");";
         String sql2 = "CREATE TABLE IF NOT EXISTS stories (\n"
