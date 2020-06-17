@@ -2,6 +2,8 @@ package org.tt.indproj.core.user;
 
 import java.sql.ResultSet;
 
+import org.tt.indproj.utilities.Encryption;
+
 /**
  * Implementation of a user that can log in to the service.
  * @author terratenff
@@ -9,9 +11,28 @@ import java.sql.ResultSet;
  */
 class LoggedUser extends User {
 	
-	private final String testsalt = "testsalt";
+	/**
+	 * Flag that keeps track of whether the logged user has been
+	 * properly assigned with an ID value.
+	 */
 	private boolean unassigned = true;
+	
+	/**
+	 * Key part of the identifier unique to the logged user.<br>
+	 * Creation:<br><br>
+	 * 1. Generate a random, session-wide salt key upon logging in.<br>
+	 * 2. Append username to the left of it.<br>
+	 * 3. SHA-256 on the combination.
+	 */
 	private String identifierKey;
+	
+	/**
+	 * Value part of the identifier unique to the logged user.<br>
+	 * Creation:<br><br>
+	 * 1. Generate a random, session-wide salt upon logging in.<br>
+	 * 2. Append username to the left of it.<br>
+	 * 3. SHA-256 on the combination.
+	 */
 	private String identifierValue;
 	
 	/**
@@ -22,9 +43,11 @@ class LoggedUser extends User {
 	LoggedUser(String username, String password) {
 		setName(username);
 		setMagicWord(password);
+		setUserSalt(Encryption.generateSalt());
 		setUserId(-2);
-		// TODO: identifierKey
-		// TODO: identifierValue
+		
+		identifierKey = Encryption.generateSalt();
+		identifierValue = Encryption.generateSalt();
 	}
 	
 	/**
@@ -35,8 +58,8 @@ class LoggedUser extends User {
 	LoggedUser(ResultSet rs) {
 		// TODO
 		
-		// TODO: identifierKey
-		// TODO: identifierValue
+		identifierKey = Encryption.generateSalt();
+		identifierValue = Encryption.generateSalt();
 	}
 
 	@Override
@@ -61,17 +84,22 @@ class LoggedUser extends User {
 	public String getPassword() {
 		return getMagicWord();
 	}
+	
+	@Override
+	public String getSalt() {
+		return getUserSalt();
+	}
 
 	@Override
 	public String getIdentifierKey() {
-		
-		return "";
+		String key = getName() + identifierKey;
+		return Encryption.sha256(key);
 	}
 
 	@Override
 	public String getIdentifierValue() {
-		// TODO
-		return "";
+		String key = getName() + identifierValue;
+		return Encryption.sha256(key);
 	}
 
 	@Override

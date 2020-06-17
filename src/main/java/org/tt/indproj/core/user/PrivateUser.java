@@ -16,7 +16,7 @@ class PrivateUser extends User {
 	
 	@Override
 	public void assignId(int id) {
-		
+		return;
 	}
 
 	@Override
@@ -26,6 +26,11 @@ class PrivateUser extends User {
 
 	@Override
 	public String getPassword() {
+		return "";
+	}
+	
+	@Override
+	public String getSalt() {
 		return "";
 	}
 

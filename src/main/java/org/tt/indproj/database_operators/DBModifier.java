@@ -7,6 +7,7 @@ import java.sql.Statement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tt.indproj.utilities.Encryption;
 
 /**
  * Set of database operations that concern the modification of the database
@@ -25,11 +26,12 @@ class DBModifier {
 	 * Inserts a user into database table "people".
 	 * @param username Target username.
 	 * @param magicword Password.
+	 * @param Salt for concealing the password.
 	 * @return Outcome of the operation.
 	 */
-	static synchronized boolean insertUser(String username, String magicword) {
-		String sql = "INSERT INTO people (username, magicword) VALUES ('"
-				+ username + "', '" + magicword + "');";
+	static synchronized boolean insertUser(String username, String magicword, String salt) {
+		String sql = "INSERT INTO people (username, magicword, salt) VALUES ('"
+				+ username + "', '" + magicword + "', '" + salt + "');";
 		boolean outcome;
 		
 		Connection conn = null;
@@ -127,12 +129,14 @@ class DBModifier {
 	 * @param id ID of target user.
 	 * @param username New username.
 	 * @param magicword New password.
+	 * @param salt New salt value.
 	 * @return Outcome of the operation.
 	 */
-	static synchronized boolean updateUser(int id, String username, String magicword) {
+	static synchronized boolean updateUser(int id, String username, String magicword, String salt) {
 		String sql = "UPDATE people SET\n"
 				+ "username='" + username + "', "
-				+ "magicword='" + magicword + "' WHERE id=" + id + ";";
+				+ "magicword='" + magicword + "', "
+				+ "salt='" + salt + "' WHERE id=" + id + ";";
 		boolean outcome;
 		
 		Connection conn = null;

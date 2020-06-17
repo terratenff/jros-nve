@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.tt.indproj.core.IUser;
+import org.tt.indproj.database_operators.DBBroker;
 
 /**
  * Handles the creation and tracking of user entities.
@@ -28,9 +29,13 @@ public class UserManager {
 	 * of being logged out.
 	 */
 	public static IUser getUser(String identifierKey, String identifierValue) {
-		// TODO: If identifier key and values match, return a logged user.
-		// The logged user should be collected from the list.
-		// TODO: If identifier matches fail, return a private user.
+		for (IUser user : activeUsers) {
+			String key = user.getIdentifierKey();
+			String value = user.getIdentifierValue();
+			boolean keyPass = identifierKey.equals(key);
+			boolean valuePass = identifierValue.equals(value);
+			if (keyPass && valuePass) return user;
+		}
 		return new PrivateUser();
 	}
 	
@@ -51,17 +56,22 @@ public class UserManager {
 	
 	/**
 	 * Creates a new logged user from given username and password.
-	 * Note that its ID has to be assigned afterwards.
+	 * Note that its ID has to be assigned afterwards. <b>If a user with
+	 * the same username already exists, target logged user is not created!</b>
 	 * @param username Name of the new logged user.
 	 * @param password Password of the new logged user.
 	 * @return Brand new logged user of the application. Its ID has to be
-	 * set (via the DBBroker).
+	 * set (via the DBBroker). If a user with the same username already exists,
+	 * null is returned.
 	 */
 	public static IUser createUser(String username, String password) {
-		IUser user = new LoggedUser(username, password);
-		if (!activeUsers.contains(user)) {
-			activeUsers.add(user);
+		boolean userExists = DBBroker.userExists(username);
+		if (userExists) {
+			// Oops!
+			return null;
 		}
+		IUser user = new LoggedUser(username, password);
+		activeUsers.add(user);
 		return user;
 	}
 }

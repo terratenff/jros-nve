@@ -95,6 +95,7 @@ public class ParamReader {
 			break;
 		case SQL:
 			sql(params);
+			break;
 		default:
 			break;
 		}
@@ -197,6 +198,7 @@ public class ParamReader {
 					+ "of the database changes.");
 		}
 		if (sql) {
+			logger.info("'sql' - Does nothing by itself: it needs an SQL query to accompany it.");
 			logger.info("'sql-<query>' - Performs specified SQL query before booting up.");
 			logger.info("'sql-<query> <param>' - Performs specified SQL query before booting up, "
 					+ "while also taking a parameter into account.");

@@ -16,8 +16,8 @@ public interface IUser {
 	public int getId();
 	
 	/**
-	 * Gives the user instance an ID number. This function is meant to be called
-	 * only once, immediately after being added to the database.
+	 * Gives the user instance an ID number. This function is meant to be called only once,
+	 * immediately after being added to the database.
 	 * @param id Assigned ID.
 	 */
 	public void assignId(int id);
@@ -33,6 +33,12 @@ public interface IUser {
 	 * @return Password.
 	 */
 	public String getPassword();
+	
+	/**
+	 * Getter for user's salt value.
+	 * @return Salt.
+	 */
+	public String getSalt();
 	
 	/**
 	 * Getter for the key part of the user's identifier.

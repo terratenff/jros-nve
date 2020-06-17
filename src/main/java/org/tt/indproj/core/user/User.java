@@ -29,6 +29,11 @@ abstract class User implements IUser {
 	 */
 	private String password;
 	
+	/**
+	 * User's personal salt value.
+	 */
+	private String salt;
+	
 	private List<IStory> stories = new ArrayList<IStory>();
 	private List<IRating> ratings = new ArrayList<IRating>();
 	
@@ -37,8 +42,8 @@ abstract class User implements IUser {
 	 * @param var Positive integer or 0 for logged-in users, and -1
 	 * for anonymous users.
 	 */
-	int setUserId(int var) {
-		return id;
+	void setUserId(int var) {
+		id = var;
 	}
 	
 	/**
@@ -46,16 +51,20 @@ abstract class User implements IUser {
 	 * @param var Name decided by the users as logged-in users.
 	 * Defaults to "The Anonymous Collective" for anonymous users.
 	 */
-	String setName(String var) {
-		return username;
+	void setName(String var) {
+		username = var;
 	}
 	
 	/**
 	 * Setter for the magic word.
 	 * @param var Password.
 	 */
-	String setMagicWord(String var) {
-		return password;
+	void setMagicWord(String var) {
+		password = var;
+	}
+	
+	void setUserSalt(String var) {
+		salt = var;
 	}
 	
 	/**
@@ -82,6 +91,10 @@ abstract class User implements IUser {
 	 */
 	String getMagicWord() {
 		return password;
+	}
+	
+	String getUserSalt() {
+		return salt;
 	}
 	
 	@Override

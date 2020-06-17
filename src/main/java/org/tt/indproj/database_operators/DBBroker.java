@@ -9,6 +9,7 @@ import org.tt.indproj.core.IRating;
 import org.tt.indproj.core.IStory;
 import org.tt.indproj.core.IUser;
 import org.tt.indproj.core.user.UserManager;
+import org.tt.indproj.utilities.Encryption;
 import org.tt.indproj.core.story.StoryManager;
 import org.tt.indproj.core.rating.RatingManager;
 
@@ -73,7 +74,8 @@ public class DBBroker {
     public static void insertUser(IUser user) {
     	String username = user.getUsername();
     	String pwd = user.getPassword();
-    	boolean outcome = DBModifier.insertUser(username, pwd);
+    	String salt = user.getSalt();
+    	boolean outcome = DBModifier.insertUser(username, pwd, salt);
     	if (outcome) {
     		int id = DBReader.getUserId(username);
     		user.assignId(id);
@@ -110,7 +112,8 @@ public class DBBroker {
     	int id = user.getId();
     	String username = user.getUsername();
     	String pwd = user.getPassword();
-    	DBModifier.updateUser(id, username, pwd);
+    	String salt = user.getSalt();
+    	DBModifier.updateUser(id, username, pwd, salt);
     }
     
     /**
@@ -252,5 +255,14 @@ public class DBBroker {
      */
     public static void clearTable(String table) {
     	DBModifier.clearTable(table);
+    }
+    
+    /**
+     * Checks whether specified user exists.
+     * @param username Target user as username.
+     * @return true, if exists. false otherwise.
+     */
+    public static boolean userExists(String username) {
+    	return DBReader.usernameExists(username);
     }
 }
