@@ -75,14 +75,15 @@ class DBOperations {
     static void printResultSet(ResultSet rs, boolean skipLargeInstances) throws SQLException {
     	ResultSetMetaData rsmd = rs.getMetaData();
     	List<String> columns = new ArrayList<String>();
-    	for (int i = 0; i < rsmd.getColumnCount(); i++) {
+    	for (int i = 1; i <= rsmd.getColumnCount(); i++) {
     		columns.add(rsmd.getColumnName(i));
     	}
     	
     	String content = "";
-    	int counter = 0;
+    	int counter = 1;
     	while (rs.next()) {
     		logger.info("Entry [" + counter + "]");
+    		++counter;
     		for (String column : columns) {
     			content = rs.getString(column);
     			if (content.length() > 255 && skipLargeInstances) {

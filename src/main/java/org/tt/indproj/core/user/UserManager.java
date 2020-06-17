@@ -1,6 +1,7 @@
 package org.tt.indproj.core.user;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,12 +49,12 @@ public class UserManager {
 	 * closed during this operation!</b>
 	 * @return Existing logged user based on provided ResultSet from the
 	 * database.
+	 * @throws SQLException 
 	 */
-	public static IUser createUser(ResultSet rs) {
+	public synchronized static IUser createUser(ResultSet rs) throws SQLException {
 		IUser user = new LoggedUser(rs);
-		if (!activeUsers.contains(user)) {
-			activeUsers.add(user);
-		}
+		if (activeUsers.contains(user)) activeUsers.remove(user);
+		activeUsers.add(user);
 		return user;
 	}
 	

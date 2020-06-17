@@ -1,6 +1,7 @@
 package org.tt.indproj.core.user;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.tt.indproj.utilities.Encryption;
 
@@ -54,9 +55,13 @@ class LoggedUser extends User {
 	 * Constructor function for existing users.
 	 * @param rs ResultSet straight from the database. <b>Connection to the
 	 * database should not be closed during this process!</b>
+	 * @throws SQLException 
 	 */
-	LoggedUser(ResultSet rs) {
-		// TODO
+	LoggedUser(ResultSet rs) throws SQLException {
+		setUserSalt(rs.getString("salt"));
+		setName(rs.getString("username"));
+		setMagicWord(rs.getString("magicword"));
+		setUserId(rs.getInt("id"));
 		
 		identifierKey = Encryption.generateSalt();
 		identifierValue = Encryption.generateSalt();

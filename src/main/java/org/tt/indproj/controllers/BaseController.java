@@ -60,11 +60,13 @@ public class BaseController {
     	Cookie[] cookies = request.getCookies();
     	if (cookies != null) {
     		for (Cookie cookielist : request.getCookies()) {
-        		logger.info("LIST COOKIE: " + cookielist.getName());
+    			// Test output
+        		logger.info(cookielist.getName() + ": " + cookielist.getValue());
         	}
     	}
 
         // TODO
+    	
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
         String[] contents = ContentFetcher.getParagraphs("index.txt");
@@ -79,12 +81,14 @@ public class BaseController {
      * View-function for the story selection page.
      */
     @RequestMapping(STORY)
-    public ModelAndView storySelection(final HttpServletResponse response) {
+    public ModelAndView storySelection() {
     	logger.info("Navigated to '" + STORY + "'.");
-        // TODO
-    	response.addCookie(new Cookie("story", "hello"));
+    	
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+        
         String[] contents = ContentFetcher.getParagraphs("story_selection.txt");
         mav.addObject("texts", contents);
         mav.addObject("pageContext", 1);
@@ -97,9 +101,12 @@ public class BaseController {
     @RequestMapping(ABOUT)
     public ModelAndView about() {
     	logger.info("Navigated to '" + ABOUT + "'.");
-        // TODO
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+        
         String[] contents = ContentFetcher.getParagraphs("about.txt");
         mav.addObject("texts", contents);
         mav.addObject("pageContext", 2);
@@ -112,9 +119,12 @@ public class BaseController {
     @RequestMapping(HELP)
     public ModelAndView help() {
     	logger.info("Navigated to '" + HELP + "'.");
-        // TODO
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+        
         String[] contents = ContentFetcher.getParagraphs("help.txt");
         mav.addObject("texts", contents);
         return mav;
@@ -126,9 +136,12 @@ public class BaseController {
     @RequestMapping(RULES)
     public ModelAndView rules() {
     	logger.info("Navigated to '" + RULES + "'.");
-        // TODO
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+        
         return mav;
     }
 
@@ -138,9 +151,12 @@ public class BaseController {
     @RequestMapping(GUIDELINES)
     public ModelAndView guidelines() {
     	logger.info("Navigated to '" + GUIDELINES + "'.");
-        // TODO
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+        
         return mav;
     }
 
@@ -150,9 +166,12 @@ public class BaseController {
     @RequestMapping(CONTACT)
     public ModelAndView contact() {
     	logger.info("Navigated to '" + CONTACT + "'.");
-        // TODO
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+        
         return mav;
     }
 
@@ -162,9 +181,12 @@ public class BaseController {
     @RequestMapping(FAQ)
     public ModelAndView faq() {
     	logger.info("Navigated to '" + FAQ + "'.");
-        // TODO
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+        
         return mav;
     }
 
@@ -174,9 +196,12 @@ public class BaseController {
     @RequestMapping(INSTRUCTIONS)
     public ModelAndView instructions() {
     	logger.info("Navigated to '" + INSTRUCTIONS + "'.");
-        // TODO
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+        
         return mav;
     }
 
@@ -186,9 +211,12 @@ public class BaseController {
     @RequestMapping(FEEDBACK)
     public ModelAndView feedback() {
     	logger.info("Navigated to '" + FEEDBACK + "'.");
-        // TODO
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+        
         return mav;
     }
 
@@ -198,9 +226,12 @@ public class BaseController {
     @RequestMapping(SUPPORT)
     public ModelAndView support() {
     	logger.info("Navigated to '" + SUPPORT + "'.");
-        // TODO
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+        
         return mav;
     }
 
@@ -210,10 +241,12 @@ public class BaseController {
     @RequestMapping(API)
     public ModelAndView api() {
     	logger.info("Navigated to '" + API + "'.");
-        // TODO
+        
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
-        //DBBroker.createDatabase();
+        
+        // TODO
+        
         return mav;
     }
     
@@ -224,11 +257,21 @@ public class BaseController {
     public ModelAndView loginPost(final HttpServletRequest request,
     		@RequestParam("username") final String username,
     		@RequestParam("pwd") final String password,
+    		@CookieValue(value = "session_id", defaultValue = "") String idKey,
+    		@CookieValue(value = "session_value", defaultValue = "") String idValue,
     		final HttpServletResponse response) {
     	logger.info("Navigated to '" + LOGIN + "'. An attempt to log in was made.");
-        
-        ModelAndView mav = new ModelAndView();
+    	
+    	ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // TODO
+    	
+    	IUser existingUser = UserManager.getUser(idKey, idValue);
+    	if (existingUser.getId() >= 0) {
+    		logger.warn("User is already logged in!");
+    		return mav;
+    	}
         
         IUser user = DBBroker.login(username, password);
         if (user == null) {
@@ -240,9 +283,9 @@ public class BaseController {
         	cookie2.setMaxAge(-1);
         	response.addCookie(cookie1);
         	response.addCookie(cookie2);
+        	
+        	// TODO
         }
-        
-        // TODO
         
         return mav;
     }
@@ -253,9 +296,11 @@ public class BaseController {
     @RequestMapping(value = LOGIN, method = RequestMethod.GET)
     public ModelAndView loginGet() {
     	logger.info("Navigated to '" + LOGIN + "'. Login page visited.");
-        // TODO
-        ModelAndView mav = new ModelAndView();
+    	
+    	ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+    	
+        // TODO
         
         return mav;
     }
@@ -271,6 +316,9 @@ public class BaseController {
     		final HttpServletResponse response) {
     	logger.info("Navigated to '" + SIGNUP + "'. An attempt to create an account was made.");
         
+    	ModelAndView mav = new ModelAndView();
+        mav.setViewName("index");
+    	
     	IUser user;
     	if (!password.equals(passwordRepeat)) {
     		logger.error("Passwords do not match!");
@@ -297,8 +345,6 @@ public class BaseController {
         	}
     	}
     	
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("index");
         return mav;
     }
     
@@ -324,27 +370,27 @@ public class BaseController {
     		@CookieValue(value = "session_value", defaultValue = "") String idValue,
     		final HttpServletRequest request, final HttpServletResponse response) {
     	logger.info("Navigated to '" + LOGOUT + "'. An attempt to log out is made.");
+    	
+    	ModelAndView mav = new ModelAndView();
+        mav.setViewName("index");
         
     	IUser user = UserManager.getUser(idKey, idValue);
-    	if (user.getId() > 0) {
-    		Cookie[] cookies = request.getCookies();
-    		if (cookies != null) {
-    			for (Cookie cookie : cookies) {
-    				String name = cookie.getName();
-    				if (name.equals("session_id") || name.equals("session_value")) {
-    					cookie.setValue("");
-    					cookie.setPath("/");
-    					cookie.setMaxAge(0);
-    					response.addCookie(cookie);
-    				}
-    			}
-    		}
-    	} else {
+    	if (user.getId() < 0) {
     		logger.warn("User is already logged out.");
     	}
     	
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("index");
+    	Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				String name = cookie.getName();
+				if (name.equals("session_id") || name.equals("session_value")) {
+					cookie.setValue("");
+					cookie.setPath("/");
+					cookie.setMaxAge(0);
+					response.addCookie(cookie);
+				}
+			}
+		}
         
         return mav;
     }

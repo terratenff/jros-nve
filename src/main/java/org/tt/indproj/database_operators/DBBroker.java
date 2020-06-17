@@ -1,10 +1,13 @@
 package org.tt.indproj.database_operators;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tt.indproj.core.IRating;
 import org.tt.indproj.core.IStory;
 import org.tt.indproj.core.IUser;
@@ -18,6 +21,11 @@ import org.tt.indproj.core.rating.RatingManager;
  * @author terratenff
  */
 public class DBBroker {
+	
+	/**
+	 * Writes down information relating to database mediations.
+	 */
+	private static Logger logger = LoggerFactory.getLogger(DBBroker.class);
 	
 	/**
 	 * Temporary container for a singular user.
@@ -164,7 +172,12 @@ public class DBBroker {
      */
     public synchronized static IUser getUser(int id) {
     	DBReader.processUser(id, rs -> {
-    		userTemp = UserManager.createUser(rs);
+    		try {
+				userTemp = UserManager.createUser(rs);
+			} catch (SQLException e) {
+				logger.error("Error in user acquisition callback:");
+				logger.error(e.getMessage());
+			}
     	});
     	return userTemp;
     }
@@ -196,7 +209,12 @@ public class DBBroker {
     public synchronized static List<IUser> getUsers() {
     	userListTemp.clear();
     	DBReader.processUsers(rs -> {
-    		userListTemp.add(UserManager.createUser(rs));
+    		try {
+				userListTemp.add(UserManager.createUser(rs));
+			} catch (SQLException e) {
+				logger.error("Error in user acquisition callback:");
+				logger.error(e.getMessage());
+			}
     	});
     	return userListTemp;
     }
