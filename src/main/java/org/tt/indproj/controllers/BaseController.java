@@ -52,8 +52,6 @@ public class BaseController {
     public ModelAndView index(
     		@CookieValue(value = "session_id", defaultValue = "") String idKey,
     		@CookieValue(value = "session_value", defaultValue = "") String idValue,
-    		@CookieValue(value = "darkmode", defaultValue = "notfound") String cookie,
-    		@CookieValue(value = "story", defaultValue = "nothere") String cookie2,
     		final HttpServletRequest request) {
     	logger.info("Navigated to '" + HOME + "'.");
     	
