@@ -55,15 +55,28 @@ class DBModifier {
 	 * Inserts a story into database table "stories".
 	 * @param makerId Creator of the story.
 	 * @param title Title of the story.
+	 * @param author Username of the creator of the story.
 	 * @param creationDate The date at which the story was created.
 	 * @param content Main content of the story, with default prompts.
 	 * @param promptMap Prompt-related information. CSV Format is as follows:<br>
 	 * wordIndex;promptId;promptDescription;promptFilled;promptDefault
 	 * @return Outcome of the operation.
 	 */
-	static synchronized boolean insertStory(int makerId, String title, String creationDate, String content, String promptMap) {
-		String sql = "INSERT INTO stories (makerid, title, creationdate, content, prompts) VALUES ("
-				+ makerId + ", '" + title + "', '" + creationDate + "', '" + content + ", '" + promptMap + "');";
+	static synchronized boolean insertStory(
+			int makerId,
+			String title,
+			String author,
+			String creationDate,
+			String content,
+			String promptMap) {
+		String sql = "INSERT INTO stories (makerid, title, author, creationdate, content, prompts) VALUES ("
+				+ makerId + ", '"
+				+ title + "', '"
+				+ author + "', '"
+				+ creationDate + "', '"
+				+ content + ", '"
+				+ promptMap
+				+ "');";
 		boolean outcome;
 		
 		Connection conn = null;
@@ -161,16 +174,25 @@ class DBModifier {
 	 * @param id ID of target story.
 	 * @param makerId Creator of the story.
 	 * @param title Title of the story.
+	 * @param author Username of the creator of the story.
 	 * @param creationDate The date at which the story was created.
 	 * @param content Main content of the story, with default prompts.
 	 * @param promptMap Prompt-related information. CSV Format is as follows:<br>
 	 * wordIndex;promptId;promptDescription;promptFilled;promptDefault
 	 * @return Outcome of the operation.
 	 */
-	static synchronized boolean updateStory(int id, int makerId, String title, String creationDate, String content, String promptMap) {
+	static synchronized boolean updateStory(
+			int id,
+			int makerId,
+			String title,
+			String author,
+			String creationDate,
+			String content,
+			String promptMap) {
 		String sql = "UPDATE stories SET\n"
 				+ "makerid=" + makerId + ", "
 				+ "title='" + title + "', "
+				+ "author='" + author + "', "
 				+ "creationdate='" + creationDate + "', "
 				+ "content='" + content + "', "
 				+ "prompts='" + promptMap + "' WHERE id=" + id + ";";
