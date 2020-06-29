@@ -100,13 +100,13 @@ class DBEstablisher {
         		+ "id INTEGER NOT NULL PRIMARY KEY,"
                 + "templatemakerid INTEGER,"
                 + "completematerid INTEGER,"
-                + "title VARCHAR(50),"
-                + "templateauthor VARCHAR(50) DEFAULT 'The Anonymous Collective',"
-                + "completeauthor VARCHAR(50) DEFAULT 'The Anonymous Collective',"
+                + "title VARCHAR(50) UNIQUE,"
+                + "templateauthor VARCHAR(50),"
+                + "completeauthor VARCHAR(50),"
                 + "creationdate VARCHAR(16)," // 'YYYY-MM-DD HH:MM'
                 + "viewcount INTEGER DEFAULT 0,"
                 + "content TEXT," // Story itself with default prompts.
-                + "prompts TEXT," // CSV: wordIndex;promptId;promptDescription;promptDefault;promptFilled
+                + "prompts TEXT," // CSV: promptId;wordIndexes;promptDescription;promptDefault;promptFilled
                 + "FOREIGN KEY(templatemakerid) REFERENCES people(id)\n"
                 + "ON UPDATE CASCADE\n"
                 + "ON DELETE SET NULL,\n"
@@ -115,10 +115,10 @@ class DBEstablisher {
                 + "ON DELETE SET NULL,\n"
                 + "FOREIGN KEY(templateauthor) REFERENCES people(username)\n"
                 + "ON UPDATE CASCADE\n"
-                + "ON DELETE SET DEFAULT,\n"
+                + "ON DELETE SET NULL,\n"
                 + "FOREIGN KEY(completeauthor) REFERENCES people(username)\n"
                 + "ON UPDATE CASCADE\n"
-                + "ON DELETE SET DEFAULT"
+                + "ON DELETE SET NULL"
                 + ");";
         String sql3 = "CREATE TABLE IF NOT EXISTS ratings (\n"
         		+ "id INTEGER NOT NULL PRIMARY KEY,"

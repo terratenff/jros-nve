@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +31,10 @@ class DBModifier {
 	 * @param Salt for concealing the password.
 	 * @return Outcome of the operation.
 	 */
-	static synchronized boolean insertUser(String username, String magicword, String salt) {
+	static synchronized boolean insertUser(
+			String username,
+			String magicword,
+			String salt) {
 		String sql = "INSERT INTO people (username, magicword, salt) VALUES ('"
 				+ username + "', '" + magicword + "', '" + salt + "');";
 		boolean outcome;
@@ -53,26 +58,45 @@ class DBModifier {
 	
 	/**
 	 * Inserts a story into database table "stories".
-	 * @param makerId Creator of the story.
-	 * @param title Title of the story.
+	 * @param makerId ID of the creator of the story.
 	 * @param author Username of the creator of the story.
+	 * @param fillerId ID of the prompt filler of the story.
+	 * @param fillerAuthor Username of the filler of the story.
+	 * @param title Title of the story.
 	 * @param creationDate The date at which the story was created.
 	 * @param content Main content of the story, with default prompts.
 	 * @param promptMap Prompt-related information. CSV Format is as follows:<br>
 	 * wordIndex;promptId;promptDescription;promptFilled;promptDefault
 	 * @return Outcome of the operation.
 	 */
-	static synchronized boolean insertStory(
+	
+	/**
+	 * 
+	 * @param makerId
+	 * @param author
+	 * @param fillerId
+	 * @param fillerAuthor
+	 * @param title
+	 * @param creationDate
+	 * @param content
+	 * @param promptMap
+	 * @return
+	 */
+	static synchronized boolean insertStory( // TODO (insert + update)
 			int makerId,
-			String title,
 			String author,
+			int fillerId,
+			String fillerAuthor,
+			String title,
 			String creationDate,
 			String content,
 			String promptMap) {
-		String sql = "INSERT INTO stories (makerid, title, author, creationdate, content, prompts) VALUES ("
+		String sql = "INSERT INTO stories (templatemakerid, templateauthor, completemakerid, completeauthor, title, creationdate, content, prompts) VALUES ("
 				+ makerId + ", '"
+				+ author + "', "
+				+ fillerId + ", '"
+				+ fillerAuthor + "', '"
 				+ title + "', '"
-				+ author + "', '"
 				+ creationDate + "', '"
 				+ content + ", '"
 				+ promptMap
@@ -110,9 +134,16 @@ class DBModifier {
 	 * @param comment Text for the rater to provide more context for the rating.
 	 * @return Outcome of the operation.
 	 */
-	static synchronized boolean insertRating(int makerId, int raterId, int storyId,
-			String viewdate, int grade, int like, int liketype,
-			int flag, String comment) {
+	static synchronized boolean insertRating(
+			int makerId,
+			int raterId,
+			int storyId,
+			String viewdate,
+			int grade,
+			int like,
+			int liketype,
+			int flag,
+			String comment) {
 		String sql = "INSERT INTO ratings (makerid, raterid, storyid,"
 				+ "viewdate, grade, like, liketype, flag, comment) VALUES ("
 				+  makerId + ", " + raterId + ", " + storyId + ", '"
@@ -145,7 +176,11 @@ class DBModifier {
 	 * @param salt New salt value.
 	 * @return Outcome of the operation.
 	 */
-	static synchronized boolean updateUser(int id, String username, String magicword, String salt) {
+	static synchronized boolean updateUser(
+			int id,
+			String username,
+			String magicword,
+			String salt) {
 		String sql = "UPDATE people SET\n"
 				+ "username='" + username + "', "
 				+ "magicword='" + magicword + "', "
@@ -172,9 +207,11 @@ class DBModifier {
 	/**
 	 * Updates a story of specified ID with new information.
 	 * @param id ID of target story.
-	 * @param makerId Creator of the story.
-	 * @param title Title of the story.
+	 * @param makerId ID of the creator of the story.
 	 * @param author Username of the creator of the story.
+	 * @param fillerId ID of the prompt filler of the story.
+	 * @param fillerAuthor Username of the filler of the story.
+	 * @param title Title of the story.
 	 * @param creationDate The date at which the story was created.
 	 * @param content Main content of the story, with default prompts.
 	 * @param promptMap Prompt-related information. CSV Format is as follows:<br>
@@ -184,15 +221,19 @@ class DBModifier {
 	static synchronized boolean updateStory(
 			int id,
 			int makerId,
-			String title,
 			String author,
+			int fillerId,
+			String fillerAuthor,
+			String title,
 			String creationDate,
 			String content,
 			String promptMap) {
 		String sql = "UPDATE stories SET\n"
-				+ "makerid=" + makerId + ", "
+				+ "templatemakerid=" + makerId + ", "
+				+ "templateauthor='" + author + "', "
+				+ "completemakerid=" + fillerId + ", "
+				+ "completeauthor='" + fillerAuthor + "', "
 				+ "title='" + title + "', "
-				+ "author='" + author + "', "
 				+ "creationdate='" + creationDate + "', "
 				+ "content='" + content + "', "
 				+ "prompts='" + promptMap + "' WHERE id=" + id + ";";
@@ -230,9 +271,17 @@ class DBModifier {
 	 * @param comment Text for the rater to provide more context for the rating.
 	 * @return Outcome of the operation.
 	 */
-	static synchronized boolean updateRating(int id, int makerId, int raterId, int storyId,
-			String viewdate, int grade, int like, int liketype,
-			int flag, String comment) {
+	static synchronized boolean updateRating(
+			int id,
+			int makerId,
+			int raterId,
+			int storyId,
+			String viewdate,
+			int grade,
+			int like,
+			int liketype,
+			int flag,
+			String comment) {
 		String sql = "UPDATE ratings SET\n"
 				+ "makerid=" + makerId + ", "
 				+ "raterid=" + raterId + ", "
@@ -394,5 +443,30 @@ class DBModifier {
             DBOperations.terminateConnection(conn);
         }
         return outcome;
+    }
+    
+    /**
+     * Updates view counts on specified story instances.
+     * @param storyViews Map of story views. Key represents story ID. Value represents
+     * current view count of the story.
+     */
+    static synchronized void updateStoryViewCounts(Map<Integer, Integer> storyViews) {
+    	Connection conn = null;
+    	String sql;
+    	try {
+    		conn = DBOperations.establishConnection();
+    		for (Entry<Integer, Integer> keyvalue : storyViews.entrySet()) {
+    			int id = keyvalue.getKey();
+    			int viewCount = keyvalue.getValue();
+    			sql = "UPDATE stories SET viewcount=" + viewCount + " WHERE id=" + id;
+    			Statement stmt = conn.createStatement();
+    			stmt.execute(sql);
+    		}
+    	} catch (SQLException e) {
+    		logger.error("Error while updating story view counts:");
+			logger.error(e.getMessage());
+    	} finally {
+    		DBOperations.terminateConnection(conn);
+    	}
     }
 }

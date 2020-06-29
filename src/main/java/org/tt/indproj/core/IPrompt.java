@@ -1,5 +1,7 @@
 package org.tt.indproj.core;
 
+import java.util.List;
+
 /**
  * Interface for a prompt within a story.
  * @author terratenff
@@ -14,10 +16,18 @@ public interface IPrompt {
 	public int getId();
 	
 	/**
-	 * Getter for the position in a story it is part of.
-	 * @return Integer, representing a place in a list.
+	 * Gives the prompt instance an ID number. This function is meant to be called only once,
+	 * immediately after being added to the database.
+	 * @param id Assigned ID.
 	 */
-	public int getPosition();
+	public void assignId(int id);
+	
+	/**
+	 * Getter for the positions in a story it is part of.
+	 * @return List of integers, representing places in a list of strings that make
+	 * the story.
+	 */
+	public List<Integer> getPositions();
 	
 	/**
 	 * Getter for the description of the prompt that helps users provide

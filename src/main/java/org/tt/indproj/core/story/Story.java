@@ -172,7 +172,12 @@ abstract class Story implements IStory {
 	 * default inputs.
 	 * @param prompts List of prompts used in the story.
 	 */
-	Story(String creator, int creatorId, String title, List<String> contents, List<IPrompt> prompts) {
+	Story(
+			String creator,
+			int creatorId,
+			String title,
+			List<String> contents,
+			List<IPrompt> prompts) {
 		setStoryAuthorName(creator);
 		setStoryAuthorId(creatorId);
 		setStoryTitle(title);
@@ -276,5 +281,15 @@ abstract class Story implements IStory {
 	public void setAssociatedRatings(List<IRating> ratings) {
 		this.ratings.clear();
 		this.ratings = ratings; // TODO: Select ones with matching IDs.
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (obj instanceof Story) {
+			final Story objU = (Story) obj;
+			if (id == objU.id && creatorId == objU.creatorId) return true;
+			else return false;
+		} else return false;
 	}
 }

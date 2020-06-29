@@ -8,14 +8,21 @@ import org.tt.indproj.core.IPrompt;
 
 class CompleteStory extends Story {
 
-	CompleteStory(String creator, int creatorId, String title, List<String> contents, List<IPrompt> prompts) {
-		super(creator, creatorId, title, contents, prompts);
-		// TODO
+	CompleteStory(
+			String templateCreator,
+			int templateCreatorId,
+			String completeCreator,
+			int completeCreatorId,
+			String title,
+			List<String> contents,
+			List<IPrompt> prompts) {
+		super(templateCreator, templateCreatorId, title, contents, prompts);
+		setStoryFillerName(completeCreator);
+		setStoryFillerId(completeCreatorId);
 	}
 	
 	CompleteStory(ResultSet rs) throws SQLException {
 		super(rs);
-		// TODO
 	}
 
 }

@@ -1,13 +1,18 @@
 package org.tt.indproj.database_operators;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tt.indproj.core.IPrompt;
 import org.tt.indproj.core.IRating;
 import org.tt.indproj.core.IStory;
 import org.tt.indproj.core.IUser;
@@ -129,7 +134,39 @@ public class DBBroker {
      * @param story Target story entity that the database is to match.
      */
     public static void updateStory(IStory story) {
-    	// TODO
+    	int id = story.getId();
+    	int makerId = story.getMakerId();
+    	String author = story.getMakerName();
+    	int fillerId = story.getMakerId();
+    	String fillerAuthor = story.getMakerName();
+    	String title = story.getTitle();
+    	
+    	LocalDate date = story.getCreationDate();
+    	DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    	String creationDate = format.format(date);
+    	
+    	List<String> contentList = story.getContents();
+    	String content = "";
+    	for (String word : contentList) {
+    		content += word + " ";
+    	}
+    	
+    	List<IPrompt> prompts = story.getPrompts();
+    	String promptMap = "";
+    	for (IPrompt prompt : prompts) {
+    		promptMap += prompt.toString() + "\n";
+    	}
+    	
+    	DBModifier.updateStory(
+    			id,
+    			makerId,
+    			author,
+    			fillerId,
+    			fillerAuthor,
+    			title,
+    			creationDate,
+    			content,
+    			promptMap);
     }
     
     /**
@@ -154,7 +191,8 @@ public class DBBroker {
      * @param story Target story subject to removal.
      */
     public static void deleteStory(IStory story) {
-    	// TODO
+    	int id = story.getId();
+    	DBModifier.deleteStory(id);
     }
     
     /**
@@ -188,7 +226,14 @@ public class DBBroker {
      * @return Story instance with matching ID, or null.
      */
     public synchronized static IStory getStory(int id) {
-    	// TODO
+    	DBReader.processStory(id, rs -> {
+    		try {
+				storyTemp = StoryManager.createStory(rs);
+			} catch (SQLException e) {
+				logger.error("Error in story acquisition callback:");
+				logger.error(e.getMessage());
+			}
+    	});
     	return storyTemp;
     }
     
@@ -224,7 +269,15 @@ public class DBBroker {
      * @return List of every story from the database.
      */
     public synchronized static List<IStory> getStories() {
-    	// TODO
+    	storyListTemp.clear();
+    	DBReader.processStories(rs -> {
+    		try {
+				storyListTemp.add(StoryManager.createStory(rs));
+			} catch (SQLException e) {
+				logger.error("Error in story acquisition callback:");
+				logger.error(e.getMessage());
+			}
+    	});
     	return storyListTemp;
     }
     
@@ -254,8 +307,10 @@ public class DBBroker {
     /**
      * Executes SQL provided by the user.
      * @param sqlQuery SQL provided by the user, subject to execution.
+     * @param skipLargeInstances Flag
      */
     public static void executeSql(String sqlQuery, boolean skipLargeInstances) {
+    	// TODO: Edit DBModifier.executeSql(...) function.
     	DBModifier.executeSql(sqlQuery, skipLargeInstances);
     }
     
@@ -276,11 +331,34 @@ public class DBBroker {
     }
     
     /**
+     * Collects IDs and view counts from a collection of active stories (that exist
+     * in the database) and sets the database up-to-date.
+     * @param stories List of stories that are to be updated. <b>These stories
+     * must exist within the database!</b>
+     */
+    public static synchronized void updateStoryViewCounts(List<IStory> stories) {
+    	Map<Integer, Integer> storyViews = new HashMap<Integer, Integer>();
+		for (IStory story : stories) {
+			storyViews.put(story.getId(), story.getViewCount());
+		}
+    	DBModifier.updateStoryViewCounts(storyViews);
+    }
+    
+    /**
      * Checks whether specified user exists.
      * @param username Target user as username.
      * @return true, if exists. false otherwise.
      */
     public static boolean userExists(String username) {
     	return DBReader.usernameExists(username);
+    }
+    
+    /**
+     * Checks whether specified story exists.
+     * @param title Target story as its title.
+     * @return true, if exists. false otherwise.
+     */
+    public static boolean storyExists(String title) {
+    	return DBReader.storyTitleExists(title);
     }
 }

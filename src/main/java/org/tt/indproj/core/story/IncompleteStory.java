@@ -8,13 +8,18 @@ import org.tt.indproj.core.IPrompt;
 
 class IncompleteStory extends Story {
 	
-	IncompleteStory(String creator, int creatorId, String title, List<String> contents, List<IPrompt> prompts) {
+	IncompleteStory(
+			String creator,
+			int creatorId,
+			String title,
+			List<String> contents,
+			List<IPrompt> prompts) {
 		super(creator, creatorId, title, contents, prompts);
-		// TODO
 	}
 	
 	IncompleteStory(ResultSet rs) throws SQLException {
 		super(rs);
-		// TODO
+		setStoryFillerName(null);
+		setStoryFillerId(-2);
 	}
 }

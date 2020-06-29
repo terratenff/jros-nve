@@ -50,6 +50,32 @@ class DBReader {
     }
     
     /**
+     * Checks to see if specified story title exists in application database.
+     * @param title Target story title.
+     * @return true, if it already exists. false otherwise.
+     */
+    static boolean storyTitleExists(String title) {
+    	String sql = "SELECT COUNT(*) FROM stories WHERE title='" + title + "'";
+    	boolean outcome = false;
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+            	int rowCount = Integer.parseInt(rs.getString("count(*)"));
+            	if (rowCount > 0) outcome = true;
+            }
+        } catch (SQLException e) {
+        	logger.error("Error while checking for an existing story:");
+			logger.error(e.getMessage());
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
+        return outcome;
+    }
+    
+    /**
      * Prints (with a logger) the contents of specified database table.
      * @param table Target database table (if it exists).
      */
@@ -183,6 +209,53 @@ class DBReader {
             }
         } catch (SQLException e) {
         	logger.error("Error while processing every user:");
+			logger.error(e.getMessage());
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
+    }
+    
+    /**
+     * Collects an individual story from the database.
+     * @param id ID of the story.
+     * @param callback Action that is taken with the ResultSet containing
+     * the story.
+     */
+    synchronized static void processStory(int id, Consumer<ResultSet> callback) {
+    	String sql = "SELECT * FROM stories WHERE id=" + id;
+    	
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            callback.accept(rs);
+        } catch (SQLException e) {
+        	logger.error("Error while processing a specific story:");
+			logger.error(e.getMessage());
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
+    }
+    
+    /**
+     * Collects every story instance from the database.
+     * @param callback Action that is taken with the ResultSet containing
+     * the stories.
+     */
+    synchronized static void processStories(Consumer<ResultSet> callback) {
+    	String sql = "SELECT * FROM stories";
+    	
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+            	callback.accept(rs);
+            }
+        } catch (SQLException e) {
+        	logger.error("Error while processing every story:");
 			logger.error(e.getMessage());
         } finally {
             DBOperations.terminateConnection(conn);

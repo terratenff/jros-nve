@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tt.indproj.database_operators.DBBroker;
+import org.tt.indproj.utilities.DatabaseUpdater;
 
 /**
  * Collection of functions that parse command line arguments during
@@ -71,6 +72,10 @@ public class ParamReader {
 				logger.warn("Null arguments are not supported.");
 			}
 		}
+		
+		DatabaseUpdater updater = DatabaseUpdater.getUpdater();
+		updater.start();
+		
 		DBBroker.setDatabase(false, false, true);
 	}
 	
