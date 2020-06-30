@@ -100,8 +100,37 @@ public class DBBroker {
      * @param story Target story entity.
      */
     public static void insertStory(IStory story) {
-    	// TODO
-    	//DBModifier.insertStory(makerId, title, creationdate, content, prompts);
+    	int makerId = story.getMakerId();
+    	String author = story.getMakerName();
+    	int fillerId = story.getMakerId();
+    	String fillerAuthor = story.getMakerName();
+    	String title = story.getTitle();
+    	
+    	LocalDate date = story.getCreationDate();
+    	DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    	String creationDate = format.format(date);
+    	
+    	List<String> contentList = story.getContents();
+    	String content = "";
+    	for (String word : contentList) {
+    		content += word + " ";
+    	}
+    	
+    	List<IPrompt> prompts = story.getPrompts();
+    	String promptMap = "";
+    	for (IPrompt prompt : prompts) {
+    		promptMap += prompt.toString() + "\n";
+    	}
+    	
+    	DBModifier.insertStory(
+    			makerId,
+    			author,
+    			fillerId,
+    			fillerAuthor,
+    			title,
+    			creationDate,
+    			content,
+    			promptMap);
     }
     
     /**

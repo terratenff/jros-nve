@@ -5,11 +5,13 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.tt.indproj.core.IPrompt;
 import org.tt.indproj.core.IRating;
 import org.tt.indproj.core.IStory;
+import org.tt.indproj.core.story.prompt.PromptManager;
 
 /**
  * Common class for both complete and incomplete stories.
@@ -81,6 +83,60 @@ abstract class Story implements IStory {
 	 * List of ratings given for the story.
 	 */
 	private List<IRating> ratings = new ArrayList<IRating>();
+	
+	/**
+	 * Story constructor function. Used for creating new story instances. Note that
+	 * once the story has been created, its ID has to be assigned afterwards.
+	 * @param creator Story author by username.
+	 * @param creatorId Story author by ID.
+	 * @param title Story title.
+	 * @param contents List of strings that make the story. Prompts within are
+	 * default inputs.
+	 * @param prompts List of prompts used in the story.
+	 */
+	Story(
+			String creator,
+			int creatorId,
+			String title,
+			List<String> contents,
+			List<IPrompt> prompts) {
+		setStoryAuthorName(creator);
+		setStoryAuthorId(creatorId);
+		setStoryTitle(title);
+		setStoryViewCount(0);
+		setStoryContents(contents);
+		setStoryPrompts(prompts);
+	}
+	
+	/**
+	 * Story constructor function. Used for creating existing story instances
+	 * straight from the application database.
+	 * @param rs ResultSet from the database. <b>The connection to the database
+	 * should not be closed during this procedure!</b>
+	 */
+	Story(ResultSet rs) throws SQLException {
+		setStoryId(rs.getInt("id"));
+		setStoryAuthorId(rs.getInt("templatemakerid"));
+		setStoryAuthorName(rs.getString("templateauthor"));
+		setStoryFillerId(rs.getInt("completemakerid"));
+		setStoryFillerName(rs.getString("completeauthor"));
+		setStoryTitle(rs.getString("title"));
+		
+		String dateString = rs.getString("creationdate");
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("YYYY-MM-DD HH:MM");
+		LocalDate date = LocalDate.parse(dateString, format);
+		
+		setStoryCreationDate(date);
+		setStoryViewCount(rs.getInt("viewcount"));
+		
+		String rawContents = rs.getString("content");
+		setStoryContents(Arrays.asList(rawContents.split(" ")));
+		
+		String rawPrompts = rs.getString("prompts");
+		String[] promptSet = rawPrompts.split("\n");
+		List<IPrompt> promptCollection = PromptManager.getPrompts(promptSet);
+		setStoryPrompts(promptCollection);
+	}
 	
 	/**
 	 * Setter for story ID.
@@ -160,52 +216,6 @@ abstract class Story implements IStory {
 	 */
 	void setStoryPrompts(List<IPrompt> prompts) {
 		this.prompts = prompts;
-	}
-	
-	/**
-	 * Story constructor function. Used for creating new story instances. Note that
-	 * once the story has been created, its ID has to be assigned afterwards.
-	 * @param creator Story author by username.
-	 * @param creatorId Story author by ID.
-	 * @param title Story title.
-	 * @param contents List of strings that make the story. Prompts within are
-	 * default inputs.
-	 * @param prompts List of prompts used in the story.
-	 */
-	Story(
-			String creator,
-			int creatorId,
-			String title,
-			List<String> contents,
-			List<IPrompt> prompts) {
-		setStoryAuthorName(creator);
-		setStoryAuthorId(creatorId);
-		setStoryTitle(title);
-		setStoryViewCount(0);
-		setStoryContents(contents);
-		setStoryPrompts(prompts);
-	}
-	
-	/**
-	 * Story constructor function. Used for creating existing story instances
-	 * straight from the application database.
-	 * @param rs ResultSet from the database. <b>The connection to the database
-	 * should not be closed during this procedure!</b>
-	 */
-	Story(ResultSet rs) throws SQLException {
-		setStoryId(rs.getInt("id"));
-		setStoryAuthorId(rs.getInt("templatemakerid"));
-		setStoryAuthorName(rs.getString("templateauthor"));
-		setStoryFillerId(rs.getInt("completemakerid"));
-		setStoryFillerName(rs.getString("completeauthor"));
-		setStoryTitle(rs.getString("title"));
-		
-		String dateString = rs.getString("creationdate");
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("YYYY-MM-DD HH:MM");
-		LocalDate date = LocalDate.parse(dateString, format);
-		
-		setStoryCreationDate(date);
-		setStoryViewCount(rs.getInt("viewcount"));
 	}
 	
 	@Override
