@@ -113,6 +113,7 @@ abstract class Story implements IStory {
 	 * straight from the application database.
 	 * @param rs ResultSet from the database. <b>The connection to the database
 	 * should not be closed during this procedure!</b>
+	 * @throws SQLException
 	 */
 	Story(ResultSet rs) throws SQLException {
 		setStoryId(rs.getInt("id"));
