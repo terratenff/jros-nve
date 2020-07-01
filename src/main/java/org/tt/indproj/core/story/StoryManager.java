@@ -60,16 +60,6 @@ public class StoryManager {
 	/**
 	 * Creates a new incomplete story. Note that its ID has to be assigned afterwards.
 	 * <b>If a story with the same title already exists, target story is not created!</b>
-	 * @param username Name of the new logged user.
-	 * @param password Password of the new logged user.
-	 * @return Brand new logged user of the application. Its ID has to be
-	 * set (via the DBBroker). If a user with the same username already exists,
-	 * null is returned.
-	 */
-	
-	/**
-	 * Creates a new incomplete story. Note that its ID has to be assigned afterwards.
-	 * <b>If a story with the same title already exists, target story is not created!</b>
 	 * @param creator Username of the creator.
 	 * @param creatorId ID of the creator.
 	 * @param title Title of the story.
