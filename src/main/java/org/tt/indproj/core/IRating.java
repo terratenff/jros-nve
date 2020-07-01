@@ -107,6 +107,12 @@ public interface IRating {
 	public int getGrade();
 	
 	/**
+	 * Getter for whether the user personally liked the story.
+	 * @return true, if the user liked it. false otherwise.
+	 */
+	public boolean isLiked();
+	
+	/**
 	 * Getter for the like type assigned by the rater.
 	 * @return LikeType-enum given by the rater. NONE is returned if
 	 * the rater did not specifically like it.

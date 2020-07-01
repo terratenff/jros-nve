@@ -1,6 +1,5 @@
 package org.tt.indproj.database_operators;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +15,6 @@ import org.tt.indproj.core.IRating;
 import org.tt.indproj.core.IStory;
 import org.tt.indproj.core.IUser;
 import org.tt.indproj.core.user.UserManager;
-import org.tt.indproj.utilities.Encryption;
 import org.tt.indproj.core.story.StoryManager;
 import org.tt.indproj.core.rating.RatingManager;
 
@@ -88,9 +85,8 @@ public class DBBroker {
     	String username = user.getUsername();
     	String pwd = user.getPassword();
     	String salt = user.getSalt();
-    	boolean outcome = DBModifier.insertUser(username, pwd, salt);
-    	if (outcome) {
-    		int id = DBReader.getUserId(username);
+    	int id = DBModifier.insertUser(username, pwd, salt);
+    	if (id != 0) {
     		user.assignId(id);
     	}
     }
@@ -122,7 +118,7 @@ public class DBBroker {
     		promptMap += prompt.toString() + "\n";
     	}
     	
-    	DBModifier.insertStory(
+    	int id = DBModifier.insertStory(
     			makerId,
     			author,
     			fillerId,
@@ -131,6 +127,9 @@ public class DBBroker {
     			creationDate,
     			content,
     			promptMap);
+    	if (id != 0) {
+    		story.assignId(id);
+    	}
     }
     
     /**
@@ -138,12 +137,33 @@ public class DBBroker {
      * @param rating Target rating entity.
      */
     public static void insertRating(IRating rating) {
-    	// TODO
+    	int makerId = rating.getMakerId();
+    	int raterId = rating.getRaterId();
+    	int storyId = rating.getStoryId();
     	
-    	//DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    	//String dateString = format.format(viewDate);
-    	//int likeInt = like ? 1 : 0;
-    	//int flagInt = flag ? 1 : 0;
+    	LocalDate date = rating.getViewDate();
+    	DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    	String viewdate = format.format(date);
+    	
+    	int grade = rating.getGrade();
+    	int like = rating.isLiked() ? 1 : 0;
+    	int liketype = rating.getLikeType().getId();
+    	int flag = rating.isFlagged() ? 1 : 0;
+    	String comment = rating.getComment();
+    	
+    	int id = DBModifier.insertRating(
+    			makerId,
+    			raterId,
+    			storyId,
+    			viewdate,
+    			grade,
+    			like,
+    			liketype,
+    			flag,
+    			comment);
+    	if (id != 0) {
+    		rating.assignId(id);
+    	}
     }
     
     /**
@@ -203,7 +223,32 @@ public class DBBroker {
      * @param rating Target rating entity that the database is to match.
      */
     public static void updateRating(IRating rating) {
-    	// TODO
+    	int id = rating.getId();
+    	int makerId = rating.getMakerId();
+    	int raterId = rating.getRaterId();
+    	int storyId = rating.getStoryId();
+    	
+    	LocalDate date = rating.getViewDate();
+    	DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    	String viewdate = format.format(date);
+    	
+    	int grade = rating.getGrade();
+    	int like = rating.isLiked() ? 1 : 0;
+    	int liketype = rating.getLikeType().getId();
+    	int flag = rating.isFlagged() ? 1 : 0;
+    	String comment = rating.getComment();
+    	
+    	DBModifier.updateRating(
+    			id,
+    			makerId,
+    			raterId,
+    			storyId,
+    			viewdate,
+    			grade,
+    			like,
+    			liketype,
+    			flag,
+    			comment);
     }
     
     /**
@@ -229,7 +274,8 @@ public class DBBroker {
      * @param rating Target rating subject to removal.
      */
     public static void deleteRating(IRating rating) {
-    	// TODO
+    	int id = rating.getId();
+    	DBModifier.deleteRating(id);
     }
     
     /**
@@ -272,7 +318,14 @@ public class DBBroker {
      * @return Rating instance with matching ID, or null.
      */
     public synchronized static IRating getRating(int id) {
-    	// TODO
+    	DBReader.processRating(id, rs -> {
+    		try {
+				ratingTemp = RatingManager.createRating(rs);
+			} catch (SQLException e) {
+				logger.error("Error in rating acquisition callback:");
+				logger.error(e.getMessage());
+			}
+    	});
     	return ratingTemp;
     }
     
@@ -315,7 +368,15 @@ public class DBBroker {
      * @return List of every rating from the database.
      */
     public synchronized static List<IRating> getRatings() {
-    	// TODO
+    	ratingListTemp.clear();
+    	DBReader.processStories(rs -> {
+    		try {
+				ratingListTemp.add(RatingManager.createRating(rs));
+			} catch (SQLException e) {
+				logger.error("Error in rating acquisition callback:");
+				logger.error(e.getMessage());
+			}
+    	});
     	return ratingListTemp;
     }
     
@@ -389,5 +450,16 @@ public class DBBroker {
      */
     public static boolean storyExists(String title) {
     	return DBReader.storyTitleExists(title);
+    }
+    
+    /**
+     * Checks whether specified rating instance exists.
+     * @param makerId ID of the creator of the story.
+     * @param raterId ID of the creator of the rating.
+     * @param storyId ID of the story.
+     * @return true, if exists. false otherwise.
+     */
+    public static boolean ratingExists(int makerId, int raterId, int storyId) {
+    	return DBReader.ratingInstanceExists(makerId, raterId, storyId);
     }
 }

@@ -162,6 +162,11 @@ class Rating implements IRating {
 	public int getGrade() {
 		return grade;
 	}
+	
+	@Override
+	public boolean isLiked() {
+		return liked;
+	}
 
 	@Override
 	public LikeType getLikeType() {

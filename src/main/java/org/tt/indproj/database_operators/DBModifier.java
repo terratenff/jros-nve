@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tt.indproj.utilities.Encryption;
 
 /**
  * Set of database operations that concern the modification of the database
@@ -29,31 +28,32 @@ class DBModifier {
 	 * @param username Target username.
 	 * @param magicword Password.
 	 * @param Salt for concealing the password.
-	 * @return Outcome of the operation.
+	 * @return ID of inserted user. 0 is returned if insertion failed.
 	 */
-	static synchronized boolean insertUser(
+	static synchronized int insertUser(
 			String username,
 			String magicword,
 			String salt) {
 		String sql = "INSERT INTO people (username, magicword, salt) VALUES ('"
 				+ username + "', '" + magicword + "', '" + salt + "');";
-		boolean outcome;
+		String fetcher = "SELECT last_insert_rowid()";
+		int lastId = 0;
 		
 		Connection conn = null;
         try {
             conn = DBOperations.establishConnection();
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
+            ResultSet rs = stmt.executeQuery(fetcher);
+            lastId = rs.getInt("LAST");
             logger.info("A new user that goes by '" + username + "' has been added to the database.");
-            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while inserting a user into the database:");
             logger.error(e.getMessage());
-            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
-        return outcome;
+        return lastId;
 	}
 	
 	/**
@@ -67,22 +67,9 @@ class DBModifier {
 	 * @param content Main content of the story, with default prompts.
 	 * @param promptMap Prompt-related information. CSV Format is as follows:<br>
 	 * wordIndex;promptId;promptDescription;promptFilled;promptDefault
-	 * @return Outcome of the operation.
+	 * @return ID of inserted story. 0 is returned if insertion failed.
 	 */
-	
-	/**
-	 * 
-	 * @param makerId
-	 * @param author
-	 * @param fillerId
-	 * @param fillerAuthor
-	 * @param title
-	 * @param creationDate
-	 * @param content
-	 * @param promptMap
-	 * @return
-	 */
-	static synchronized boolean insertStory( // TODO (insert + update)
+	static synchronized int insertStory(
 			int makerId,
 			String author,
 			int fillerId,
@@ -101,23 +88,24 @@ class DBModifier {
 				+ content + ", '"
 				+ promptMap
 				+ "');";
-		boolean outcome;
+		String fetcher = "SELECT last_insert_rowid()";
+		int lastId = 0;
 		
 		Connection conn = null;
         try {
             conn = DBOperations.establishConnection();
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
+            ResultSet rs = stmt.executeQuery(fetcher);
+            lastId = rs.getInt("LAST");
             logger.info("A new story titled' " + "' has been added to the database.");
-            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while inserting a story into the database:");
             logger.error(e.getMessage());
-            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
-        return outcome;
+        return lastId;
 	}
 	
 	/**
@@ -132,9 +120,9 @@ class DBModifier {
 	 * @param liketype Flag for the specifics of why the rater liked the story.
 	 * @param flag Flag for whether the rater thinks that the story violates service rules.
 	 * @param comment Text for the rater to provide more context for the rating.
-	 * @return Outcome of the operation.
+	 * @return ID of inserted rating. 0 is returned if insertion failed.
 	 */
-	static synchronized boolean insertRating(
+	static synchronized int insertRating(
 			int makerId,
 			int raterId,
 			int storyId,
@@ -149,23 +137,24 @@ class DBModifier {
 				+  makerId + ", " + raterId + ", " + storyId + ", '"
 				+ viewdate + "', " + grade + ", " + like + ", " + liketype + ", "
 				+ flag + ", '" + comment + "');";
-		boolean outcome;
+		String fetcher = "SELECT last_insert_rowid()";
+		int lastId = 0;
 		
 		Connection conn = null;
         try {
             conn = DBOperations.establishConnection();
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
+            ResultSet rs = stmt.executeQuery(fetcher);
+            lastId = rs.getInt("LAST");
             logger.info("A new rating has been added to the database.");
-            outcome = true;
         } catch (SQLException e) {
             logger.error("Error while inserting a rating into the database:");
             logger.error(e.getMessage());
-            outcome = false;
         } finally {
             DBOperations.terminateConnection(conn);
         }
-        return outcome;
+        return lastId;
 	}
 	
 	/**

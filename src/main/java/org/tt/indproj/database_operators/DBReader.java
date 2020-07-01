@@ -76,6 +76,69 @@ class DBReader {
     }
     
     /**
+     * Checks to see if specified rating exists in application database.
+     * @param makerId ID of the creator of the story.
+     * @param raterId ID of the creator of the rating.
+     * @param storyId ID of the story.
+     * @return true, if it already exists. false otherwise.
+     */
+    static boolean ratingInstanceExists(int makerId, int raterId, int storyId) {
+    	String sql = "SELECT COUNT(*) FROM ratings WHERE "
+    			+ "makerid=" + makerId + " AND "
+    			+ "raterid=" + raterId + " AND "
+    			+ "storyid=" + storyId;
+    	boolean outcome = false;
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+            	int rowCount = Integer.parseInt(rs.getString("count(*)"));
+            	if (rowCount > 0) outcome = true;
+            }
+        } catch (SQLException e) {
+        	logger.error("Error while checking for an existing story:");
+			logger.error(e.getMessage());
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
+        return outcome;
+    }
+    
+    /**
+     * Checks to see if specified rating exists in application database. Rating
+     * uniqueness is based on combination of makerId, raterId and storyId.
+     * @param makerId ID of the story author.
+     * @param raterId ID of the rater.
+     * @param storyId ID of the story subject to rating.
+     * @return true, if it already exists. false otherwise.
+     */
+    static boolean ratingExists(int makerId, int raterId, int storyId) {
+    	String sql = "SELECT COUNT(*) FROM ratings WHERE "
+    			+ "makerid=" + makerId + " AND "
+    			+ "raterid=" + raterId + " AND "
+    			+ "storyid=" + storyId;
+    	boolean outcome = false;
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+            	int rowCount = Integer.parseInt(rs.getString("count(*)"));
+            	if (rowCount > 0) outcome = true;
+            }
+        } catch (SQLException e) {
+        	logger.error("Error while checking for an existing rating:");
+			logger.error(e.getMessage());
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
+        return outcome;
+    }
+    
+    /**
      * Prints (with a logger) the contents of specified database table.
      * @param table Target database table (if it exists).
      */
@@ -95,34 +158,6 @@ class DBReader {
         } finally {
             DBOperations.terminateConnection(conn);
         }
-    }
-    
-    /**
-     * Collects the ID of specified user.
-     * @param username Username.
-     * @return ID of specified user.
-     */
-    static int getUserId(String username) {
-    	String sql = "SELECT id FROM people WHERE username='" + username + "'";
-    	int id = -1;
-    	
-    	Connection conn = null;
-        try {
-            conn = DBOperations.establishConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-            	id = rs.getInt("id");
-            	break;
-            }
-        } catch (SQLException e) {
-        	logger.error("Error while viewing a database table:");
-			logger.error(e.getMessage());
-        } finally {
-            DBOperations.terminateConnection(conn);
-        }
-        if (id == -1) logger.error("Entry with username '" + username + "' could not be found.");
-        return id;
     }
     
     /**
@@ -256,6 +291,53 @@ class DBReader {
             }
         } catch (SQLException e) {
         	logger.error("Error while processing every story:");
+			logger.error(e.getMessage());
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
+    }
+    
+    /**
+     * Collects an individual rating from the database.
+     * @param id ID of the rating.
+     * @param callback Action that is taken with the ResultSet containing
+     * the rating.
+     */
+    synchronized static void processRating(int id, Consumer<ResultSet> callback) {
+    	String sql = "SELECT * FROM ratings WHERE id=" + id;
+    	
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            callback.accept(rs);
+        } catch (SQLException e) {
+        	logger.error("Error while processing a specific rating:");
+			logger.error(e.getMessage());
+        } finally {
+            DBOperations.terminateConnection(conn);
+        }
+    }
+    
+    /**
+     * Collects every rating instance from the database.
+     * @param callback Action that is taken with the ResultSet containing
+     * the ratings.
+     */
+    synchronized static void processRatings(Consumer<ResultSet> callback) {
+    	String sql = "SELECT * FROM ratings";
+    	
+    	Connection conn = null;
+        try {
+            conn = DBOperations.establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+            	callback.accept(rs);
+            }
+        } catch (SQLException e) {
+        	logger.error("Error while processing every rating:");
 			logger.error(e.getMessage());
         } finally {
             DBOperations.terminateConnection(conn);
