@@ -36,7 +36,7 @@ class DBModifier {
 			String salt) {
 		String sql = "INSERT INTO people (username, magicword, salt) VALUES ('"
 				+ username + "', '" + magicword + "', '" + salt + "');";
-		String fetcher = "SELECT last_insert_rowid()";
+		String fetcher = "SELECT last_insert_rowid() AS LAST";
 		int lastId = 0;
 		
 		Connection conn = null;
@@ -88,7 +88,7 @@ class DBModifier {
 				+ content + ", '"
 				+ promptMap
 				+ "');";
-		String fetcher = "SELECT last_insert_rowid()";
+		String fetcher = "SELECT last_insert_rowid() AS LAST";
 		int lastId = 0;
 		
 		Connection conn = null;
@@ -137,7 +137,7 @@ class DBModifier {
 				+  makerId + ", " + raterId + ", " + storyId + ", '"
 				+ viewdate + "', " + grade + ", " + like + ", " + liketype + ", "
 				+ flag + ", '" + comment + "');";
-		String fetcher = "SELECT last_insert_rowid()";
+		String fetcher = "SELECT last_insert_rowid() AS LAST";
 		int lastId = 0;
 		
 		Connection conn = null;
