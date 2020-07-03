@@ -45,7 +45,7 @@ class LoggedUser extends User {
 		setUserSalt(Encryption.generateSalt());
 		setName(username);
 		setMagicWord(Encryption.sha256(password + getUserSalt()));
-		setUserId(-2);
+		setUserId(-1);
 		
 		identifierKey = Encryption.generateSalt();
 		identifierValue = Encryption.generateSalt();
@@ -98,13 +98,13 @@ class LoggedUser extends User {
 	@Override
 	public String getIdentifierKey() {
 		String key = getName() + identifierKey;
-		return Encryption.sha256(key);
+		return Encryption.sha256(key).replaceAll("=", "");
 	}
 
 	@Override
 	public String getIdentifierValue() {
 		String key = getName() + identifierValue;
-		return Encryption.sha256(key);
+		return Encryption.sha256(key).replaceAll("=", "");
 	}
 
 	@Override

@@ -11,7 +11,7 @@ class PrivateUser extends User {
 
 	@Override
 	public int getId() {
-		return -1;
+		return 0;
 	}
 	
 	@Override

@@ -39,8 +39,8 @@ abstract class User implements IUser {
 	
 	/**
 	 * Setter for user ID.
-	 * @param var Positive integer or 0 for logged-in users, and -1
-	 * for anonymous users.
+	 * @param var Positive integer for logged-in users, and 0
+	 * for anonymous users. (-1 if an ID value has not been assigned for a logged-in user)
 	 */
 	void setUserId(int var) {
 		id = var;
@@ -69,7 +69,7 @@ abstract class User implements IUser {
 	
 	/**
 	 * Getter for user ID.
-	 * @return Positive integer or 0 for logged-in users, and -1
+	 * @return Positive integer for logged-in users, and 0
 	 * for anonymous users.
 	 */
 	int getUserId() {

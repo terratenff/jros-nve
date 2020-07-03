@@ -17,6 +17,7 @@ import org.tt.indproj.core.IUser;
 import org.tt.indproj.core.user.UserManager;
 import org.tt.indproj.database_operators.DBBroker;
 import org.tt.indproj.utilities.ContentFetcher;
+import org.tt.indproj.utilities.HttpServletInspector;
 
 /**
  * The Base Controller, with no initial mapping. One can access the
@@ -48,12 +49,12 @@ public class BaseController {
     /**
      * View-function for the home page.
      */
-    @RequestMapping(HOME)
-    public ModelAndView index(
-    		@CookieValue(value = "session_id", defaultValue = "") String idKey,
-    		@CookieValue(value = "session_value", defaultValue = "") String idValue,
-    		final HttpServletRequest request) {
+    @RequestMapping(HOME) // TODO: Reduce identification cookies from 2 to 1.
+    public ModelAndView index(final HttpServletRequest request) {
     	logger.info("Navigated to '" + HOME + "'.");
+    	
+    	ModelAndView mav = new ModelAndView();
+        mav.setViewName("index");
     	
     	Cookie[] cookies = request.getCookies();
     	if (cookies != null) {
@@ -62,11 +63,16 @@ public class BaseController {
         		logger.info(cookielist.getName() + ": " + cookielist.getValue());
         	}
     	}
+    	
+    	IUser user = HttpServletInspector.collectUser(request);
+    	if (user.getId() != 0) {
+    		logger.info("You are currently logged in as '" + user.getUsername() + "'.");
+    	} else {
+    		logger.info("You are currently logged out.");
+    	}
 
         // TODO
     	
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("index");
         String[] contents = ContentFetcher.getParagraphs("index.txt");
         mav.addObject("texts", contents);
         mav.addObject("pageContext", 0);
@@ -255,8 +261,6 @@ public class BaseController {
     public ModelAndView loginPost(final HttpServletRequest request,
     		@RequestParam("username") final String username,
     		@RequestParam("pwd") final String password,
-    		@CookieValue(value = "session_id", defaultValue = "") String idKey,
-    		@CookieValue(value = "session_value", defaultValue = "") String idValue,
     		final HttpServletResponse response) {
     	logger.info("Navigated to '" + LOGIN + "'. An attempt to log in was made.");
     	
@@ -265,8 +269,9 @@ public class BaseController {
         
         // TODO
     	
-    	IUser existingUser = UserManager.getUser(idKey, idValue);
-    	if (existingUser.getId() >= 0) {
+        // Prevent logging in if user is already logged in.
+    	IUser existingUser = HttpServletInspector.collectUser(request);
+    	if (existingUser.getId() > 0) {
     		logger.warn("User is already logged in!");
     		return mav;
     	}
@@ -275,12 +280,9 @@ public class BaseController {
         if (user == null) {
         	logger.error("Login failed.");
         } else {
-        	Cookie cookie1 = new Cookie("session_id", user.getIdentifierKey());
-        	Cookie cookie2 = new Cookie("session_value", user.getIdentifierValue());
-        	cookie1.setMaxAge(-1);
-        	cookie2.setMaxAge(-1);
-        	response.addCookie(cookie1);
-        	response.addCookie(cookie2);
+        	Cookie cookie = new Cookie(user.getIdentifierKey(), user.getIdentifierValue());
+        	cookie.setMaxAge(-1);
+        	response.addCookie(cookie);
         	
         	// TODO
         }
@@ -316,6 +318,13 @@ public class BaseController {
         
     	ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        
+        // Prevent signing up if user is already logged in.
+    	IUser existingUser = HttpServletInspector.collectUser(request);
+    	if (existingUser.getId() > 0) {
+    		logger.warn("User is already logged in!");
+    		return mav;
+    	}
     	
     	IUser user;
     	if (!password.equals(passwordRepeat)) {
@@ -331,12 +340,9 @@ public class BaseController {
         		} else {
         			logger.info("User insertion succeeded. Authorizing user...");
         			
-        			Cookie cookie1 = new Cookie("session_id", user.getIdentifierKey());
-                	Cookie cookie2 = new Cookie("session_value", user.getIdentifierValue());
-                	cookie1.setMaxAge(-1);
-                	cookie2.setMaxAge(-1);
-                	response.addCookie(cookie1);
-                	response.addCookie(cookie2);
+        			Cookie cookie = new Cookie(user.getIdentifierKey(), user.getIdentifierValue());
+                	cookie.setMaxAge(-1);
+                	response.addCookie(cookie);
         			
         			// TODO
         		}
@@ -360,35 +366,25 @@ public class BaseController {
     }
     
     /**
-     * View-function for creating a new account.
+     * View-function for logging out.
      */
     @RequestMapping(value = LOGOUT)
     public ModelAndView logout(
-    		@CookieValue(value = "session_id", defaultValue = "") String idKey,
-    		@CookieValue(value = "session_value", defaultValue = "") String idValue,
-    		final HttpServletRequest request, final HttpServletResponse response) {
+    		final HttpServletRequest request,
+    		final HttpServletResponse response) {
     	logger.info("Navigated to '" + LOGOUT + "'. An attempt to log out is made.");
     	
     	ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
         
-    	IUser user = UserManager.getUser(idKey, idValue);
-    	if (user.getId() < 0) {
+    	IUser user = HttpServletInspector.collectUser(request);
+    	if (user.getId() == 0) {
     		logger.warn("User is already logged out.");
+    	} else {
+    		String cookieName = user.getIdentifierKey();
+    		HttpServletInspector.expireCookie(response, cookieName);
+    		logger.warn("You have logged out as user '" + user.getUsername() + "'.");
     	}
-    	
-    	Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				String name = cookie.getName();
-				if (name.equals("session_id") || name.equals("session_value")) {
-					cookie.setValue("");
-					cookie.setPath("/");
-					cookie.setMaxAge(0);
-					response.addCookie(cookie);
-				}
-			}
-		}
         
         return mav;
     }

@@ -389,7 +389,7 @@ public class DBBroker {
      */
     public static IUser login(String username, String password) {
     	int outcome = DBReader.login(username, password);
-    	if (outcome >= 0) {
+    	if (outcome > 0) {
     		return getUser(outcome);
     	} else return null;
     }

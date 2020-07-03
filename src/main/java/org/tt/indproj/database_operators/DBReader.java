@@ -164,12 +164,12 @@ class DBReader {
      * Attempts user authorization.
      * @param username Username input by user.
      * @param password Password input by user.
-     * @return ID of the user if authorization was successful. -1 if authroization
+     * @return ID of the user if authorization was successful. 0 if authroization
      * failed (nonexistent username, invalid password, exception).
      */
     static int login(String username, String password) {
     	String sql = "SELECT id, magicword, salt FROM people WHERE username='" + username + "'";
-    	int outcome = -1;
+    	int outcome = 0;
     	
     	Connection conn = null;
         try {
@@ -186,7 +186,7 @@ class DBReader {
             		break;
             	} else {
             		logger.error("Authorization failed: invalid password.");
-            		outcome = -1;
+            		outcome = 0;
             		break;
             	}
             }
@@ -196,7 +196,7 @@ class DBReader {
         } catch (SQLException e) {
         	logger.error("Error while authorizing a specific user:");
 			logger.error(e.getMessage());
-			outcome = -1;
+			outcome = 0;
         } finally {
             DBOperations.terminateConnection(conn);
         }
