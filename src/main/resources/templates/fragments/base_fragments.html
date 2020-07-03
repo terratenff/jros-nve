@@ -3,12 +3,12 @@
 <head></head>
 <body>
     <div th:fragment="test_fragment" th:remove="tag">
-        <p>Test Fragment 1</p>
+        <p>Test Fragment</p>
     </div>
-    <div th:fragment="test_fragment2" th:remove="tag">
-        <p>Test Fragment 2</p>
+    <div th:fragment="fragment-home" th:remove="tag">
+        <p>Home Fragment</p>
     </div>
-    <div th:fragment="story_selection" th:remove="tag">
+    <div th:fragment="fragment-story_selection" th:remove="tag">
         <div id="story_selector">
             <a th:href="@{/}">
                 <div class="story_option">
@@ -32,6 +32,39 @@
                 </div>
             </a>
         </div>
+    </div>
+    <div th:fragment="fragment-about" th:remove="tag">
+        <p>About Fragment</p>
+    </div>
+    <div th:fragment="fragment-help" th:remove="tag">
+        <p>Help Fragment</p>
+    </div>
+    <div th:fragment="fragment-rules" th:remove="tag">
+        <p>Rules Fragment</p>
+    </div>
+    <div th:fragment="fragment-guidelines" th:remove="tag">
+        <p>Guidelines Fragment</p>
+    </div>
+    <div th:fragment="fragment-contact" th:remove="tag">
+        <p>Contact Fragment</p>
+    </div>
+    <div th:fragment="fragment-faq" th:remove="tag">
+        <p>Frequently Asked Questions Fragment</p>
+    </div>
+    <div th:fragment="fragment-instructions" th:remove="tag">
+        <p>Instructions Fragment</p>
+    </div>
+    <div th:fragment="fragment-feedback" th:remove="tag">
+        <p>Feedback Fragment</p>
+    </div>
+    <div th:fragment="fragment-tech_support" th:remove="tag">
+        <p>Tech Support Fragment</p>
+    </div>
+    <div th:fragment="fragment-api" th:remove="tag">
+        <p>API Fragment</p>
+    </div>
+    <div th:fragment="fragment-other" th:remove="tag">
+        <p>Mysterious Fragment (case asterisk)</p>
     </div>
 </body>
 </html>

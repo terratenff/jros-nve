@@ -26,10 +26,19 @@
     <div id="page_content">
         <div id="content">
             <div th:switch="${pageContext}" th:remove="tag">
-                <th:block th:case="0" th:include="fragments/base_fragments :: test_fragment"></th:block>
-                <th:block th:case="1" th:include="fragments/base_fragments :: story_selection"></th:block>
-                <th:block th:case="2" th:include="fragments/base_fragments :: test_fragment"></th:block>
-                <th:block th:case="*" th:include="fragments/base_fragments :: test_fragment2"></th:block>
+                <th:block th:case="0" th:include="fragments/base_fragments :: fragment-home"></th:block>
+                <th:block th:case="1" th:include="fragments/base_fragments :: fragment-story_selection"></th:block>
+                <th:block th:case="2" th:include="fragments/base_fragments :: fragment-about"></th:block>
+                <th:block th:case="3" th:include="fragments/base_fragments :: fragment-help"></th:block>
+                <th:block th:case="4" th:include="fragments/base_fragments :: fragment-rules"></th:block>
+                <th:block th:case="5" th:include="fragments/base_fragments :: fragment-guidelines"></th:block>
+                <th:block th:case="6" th:include="fragments/base_fragments :: fragment-contact"></th:block>
+                <th:block th:case="7" th:include="fragments/base_fragments :: fragment-faq"></th:block>
+                <th:block th:case="8" th:include="fragments/base_fragments :: fragment-instructions"></th:block>
+                <th:block th:case="9" th:include="fragments/base_fragments :: fragment-feedback"></th:block>
+                <th:block th:case="10" th:include="fragments/base_fragments :: fragment-tech_support"></th:block>
+                <th:block th:case="11" th:include="fragments/base_fragments :: fragment-api"></th:block>
+                <th:block th:case="*" th:include="fragments/base_fragments :: fragment-other"></th:block>
             </div>
             <th:block th:each="text,iter : ${texts}">
                 <!--<p th:text="'Entry ' + (${iter.index} + 1) + ' / ' + ${iter.size}"></p>-->

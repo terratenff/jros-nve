@@ -55,6 +55,7 @@ public class BaseController {
     	
     	ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 0);
     	
     	Cookie[] cookies = request.getCookies();
     	if (cookies != null) {
@@ -75,7 +76,6 @@ public class BaseController {
     	
         String[] contents = ContentFetcher.getParagraphs("index.txt");
         mav.addObject("texts", contents);
-        mav.addObject("pageContext", 0);
         // mav.addObject("key", value);
         // <p th:text="'Text ' + ${key}"></p>
         return mav;
@@ -90,12 +90,12 @@ public class BaseController {
     	
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 1);
         
         // TODO
         
         String[] contents = ContentFetcher.getParagraphs("story_selection.txt");
         mav.addObject("texts", contents);
-        mav.addObject("pageContext", 1);
         return mav;
     }
 
@@ -108,12 +108,12 @@ public class BaseController {
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 2);
         
         // TODO
         
         String[] contents = ContentFetcher.getParagraphs("about.txt");
         mav.addObject("texts", contents);
-        mav.addObject("pageContext", 2);
         return mav;
     }
 
@@ -126,6 +126,7 @@ public class BaseController {
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 3);
         
         // TODO
         
@@ -143,6 +144,7 @@ public class BaseController {
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 4);
         
         // TODO
         
@@ -158,6 +160,7 @@ public class BaseController {
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 5);
         
         // TODO
         
@@ -173,6 +176,7 @@ public class BaseController {
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 6);
         
         // TODO
         
@@ -188,6 +192,7 @@ public class BaseController {
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 7);
         
         // TODO
         
@@ -203,6 +208,7 @@ public class BaseController {
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 8);
         
         // TODO
         
@@ -218,6 +224,7 @@ public class BaseController {
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 9);
         
         // TODO
         
@@ -233,6 +240,7 @@ public class BaseController {
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 10);
         
         // TODO
         
@@ -248,6 +256,7 @@ public class BaseController {
         
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
+        mav.addObject("pageContext", 11);
         
         // TODO
         
