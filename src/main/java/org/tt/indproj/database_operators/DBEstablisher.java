@@ -23,7 +23,7 @@ class DBEstablisher {
 	
     /**
      * Creates the application database.
-     * @param discreet Deterimnes whether the user should be bothered with
+     * @param discreet Determines whether the user should be bothered with
      * information about the database file existing if an attempt to create
      * one is made.
      */
@@ -35,13 +35,15 @@ class DBEstablisher {
     		}
     	}
     	else {
-    		logger.info("Proceeding to create application database...");
+    		if (!discreet) {
+    			logger.info("Making application database...");
+    		}
     		initializeDatabase();
     	}
     }
     
     /**
-     * Deletes application database and creates it again from scratch.
+     * Deletes the application database and recreates it from scratch.
      */
     static void resetDatabase() {
     	try {
@@ -87,7 +89,7 @@ class DBEstablisher {
     }
     
     /**
-     * Initializes application database.
+     * Initializes application database structure.
      */
     static void initializeDatabase() {
     	String sql1 = "CREATE TABLE IF NOT EXISTS people (\n"

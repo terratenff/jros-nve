@@ -38,7 +38,7 @@ class DBModifier {
 				+ username + "', '" + magicword + "', '" + salt + "');";
 		String fetcher = "SELECT last_insert_rowid() AS LAST";
 		int lastId = 0;
-		
+		// TODO: Input sanitizing.
 		Connection conn = null;
         try {
             conn = DBOperations.establishConnection();
@@ -410,6 +410,7 @@ class DBModifier {
      * @return Outcome of the operation.
      */
     static synchronized boolean executeSql(String sqlQuery, boolean skipLargeInstances) {
+    	// TODO: Split to Read and Modify. Redirect execution to a generic sql executor in DBOperations.
     	boolean outcome;
     	Connection conn = null;
         try {

@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * Acts as a collection of functions related to database management.
  * @author terratenff
  */
-class DBOperations {
+class DBOperations { // TODO: Create a synchronized convenience function that executes specified SQL.
 	
 	/**
 	 * Writes down information from generic database operations.
@@ -70,6 +70,8 @@ class DBOperations {
     /**
      * Convenient print function for database result sets.
      * @param rs ResultSet. <b>Connection to related database must not be closed!</b>
+     * @param skipLargeInstances Flag that determines whether large entries (greater than 255 characters)
+     * should be omitted.
      * @throws SQLException 
      */
     static void printResultSet(ResultSet rs, boolean skipLargeInstances) throws SQLException {

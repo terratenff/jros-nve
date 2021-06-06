@@ -49,7 +49,7 @@ public class BaseController {
     /**
      * View-function for the home page.
      */
-    @RequestMapping(HOME) // TODO: Reduce identification cookies from 2 to 1.
+    @RequestMapping(HOME)
     public ModelAndView index(final HttpServletRequest request) {
     	logger.info("Navigated to '" + HOME + "'.");
     	

@@ -139,8 +139,10 @@ class DBReader {
     }
     
     /**
-     * Prints (with a logger) the contents of specified database table.
+     * Prints the contents of specified database table.
      * @param table Target database table (if it exists).
+     * @param skipLargeInstances Flag that determines whether large entries (greater than 255 characters)
+     * should be omitted.
      */
     static void viewTable(String table, boolean skipLargeInstances) {
     	String sql = "SELECT * FROM " + table.toLowerCase();
@@ -164,11 +166,12 @@ class DBReader {
      * Attempts user authorization.
      * @param username Username input by user.
      * @param password Password input by user.
-     * @return ID of the user if authorization was successful. 0 if authroization
-     * failed (nonexistent username, invalid password, exception).
+     * @return ID of the user if authorization was successful. 0 if authorization
+     * failed (nonexistent username, invalid password, other exceptions).
      */
     static int login(String username, String password) {
     	String sql = "SELECT id, magicword, salt FROM people WHERE username='" + username + "'";
+    	// TODO: Input sanitizing (or switch to PreparedStatement).
     	int outcome = 0;
     	
     	Connection conn = null;
@@ -192,6 +195,7 @@ class DBReader {
             }
             if (!discovery) {
             	logger.error("Authorization failed: nonexistent username");
+            	outcome = 0;
             }
         } catch (SQLException e) {
         	logger.error("Error while authorizing a specific user:");

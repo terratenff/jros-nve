@@ -45,14 +45,14 @@ public class ParamReader {
 	}
 	
 	/**
-	 * This logger could be used to write down events relating to the use
+	 * This logger is used to write down events relating to the use
 	 * of command line arguments, examples being error reporting and viewing
 	 * database contents.
 	 */
 	private static Logger logger = LoggerFactory.getLogger(ParamReader.class);
 	
 	/**
-	 * Entrty function for application configuration. Command line arguments
+	 * Entry function for application configuration. Command line arguments
 	 * are taken and processed for application configuration purposes.
 	 * @param args Command line arguments. They must follow the following format:<br>
 	 * 'main_arg1-param1 param2 param3' 'main_arg2-param1 param2 param3' etc.
@@ -162,7 +162,7 @@ public class ParamReader {
 	
 	/**
 	 * Main function for the main argument "help".
-	 * @param range Specifies the range of how much help is provided.
+	 * @param range Specifies a collection of keywords to which help is requested.
 	 */
 	private static void help(String range) {
 		boolean all = range.isEmpty();
@@ -172,7 +172,7 @@ public class ParamReader {
 		boolean reset = all || range.contains("reset");
 		boolean sql = all || range.contains("sql");
 		
-		if (!all && !view && !clear && !reset && !sql) {
+		if (!all && !help && !view && !clear && !reset && !sql) {
 			logger.warn("Arguments in '" + range + "' are not supported.");
 			return;
 		}

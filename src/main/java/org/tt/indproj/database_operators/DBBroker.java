@@ -70,6 +70,9 @@ public class DBBroker {
 	 * @param reset Flag for resetting the database (delete file and create a new one).
 	 * @param clear Flag for clearing the contents of the database. If database does
 	 * not exist, it is created instead. This flag is ignored if 'reset' is set to true.
+	 * @param discreet Flag that determines whether the user should be bothered with
+     * information about the database file existing if an attempt to create
+     * one is made. 
 	 */
     public static void setDatabase(boolean reset, boolean clear, boolean discreet) {
     	if (reset) DBEstablisher.resetDatabase();
@@ -400,7 +403,7 @@ public class DBBroker {
      * @param skipLargeInstances Flag
      */
     public static void executeSql(String sqlQuery, boolean skipLargeInstances) {
-    	// TODO: Edit DBModifier.executeSql(...) function.
+    	// TODO: Split to Read and Modify.
     	DBModifier.executeSql(sqlQuery, skipLargeInstances);
     }
     

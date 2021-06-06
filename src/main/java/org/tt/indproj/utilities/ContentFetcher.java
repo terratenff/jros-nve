@@ -14,8 +14,9 @@ import java.util.ArrayList;
  * @author terratenff
  */
 public class ContentFetcher {
+	
     /**
-     * Default path, from which most text files can be found.
+     * Default path, from which most text files are located.
      */
     private static final String PATH = "src/main/resources/textfiles/";
 
@@ -25,8 +26,7 @@ public class ContentFetcher {
     private static final String PARAGRAPH_SEPARATOR = "%P%";
 
     /**
-     * Convenience function: collects everything from specified
-     * text file.
+     * Convenience function that collects everything from specified text file.
      * @param filename Name of the text file, suffix included.
      * @return Contents of the text file, as a singular String.
      * Returns "ERROR" if an IOException occurred.
@@ -45,7 +45,7 @@ public class ContentFetcher {
      * as a String array of discovered paragraphs.
      * @param filename Name of the text file
      * @return Paragraphs of the text file as a String array.
-     * @note Paragraphs are recognized with the separator PARAGRAPH_SEPARATOR.
+     * @note Paragraphs are recognized using the separator PARAGRAPH_SEPARATOR.
      */
     public static String[] getParagraphs(String filename) {
         String content = getFileContents(filename);

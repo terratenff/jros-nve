@@ -15,21 +15,11 @@ import org.tt.indproj.core.user.UserManager;
 public class HttpServletInspector {
 	
 	/**
-	 * Attempts to find an active logged-in user by analysing existing cookies.
+	 * Attempts to find an active logged-in user by analyzing existing cookies.
 	 * @param request Http-request from which the cookies are collected.
 	 * @return A user entity, either a logged-in user or a private user.
 	 */
 	public static synchronized IUser collectUser(final HttpServletRequest request) {
-		// TODO: Notify user A if another user has logged in to user A's account.
-    	// 1. User B attempts to log in to user A's account.
-    	// 2. If user instance is active, collect its identifying values and
-    	//    store them in a list of expired identifying values (UserManager).
-    	// 3. Recreate the user instance and let user B perform authentication.
-    	// 4. User A attempts to use now-expired identifying values.
-    	// 5. Expired values are now removed from the list, and user A is given
-    	//    the notice that says that they've been logged out and implies that
-    	//    user A's account may be compromised.
-		
 		Cookie[] cookies = request.getCookies();
 		if (cookies == null) {
 			return UserManager.getUser("", "");
