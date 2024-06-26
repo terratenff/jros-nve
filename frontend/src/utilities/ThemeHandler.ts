@@ -7,7 +7,7 @@ export function toggleDarkMode() {
     }
 }
 
-function setTheme(theme) {
+function setTheme(theme: string) {
     localStorage.setItem("theme", theme);
     document.documentElement.setAttribute("data-bs-theme", theme);
     document.body.className = theme + "-mode";
@@ -16,5 +16,5 @@ function setTheme(theme) {
 if (localStorage.getItem("theme") === null) {
     setTheme("light");
 } else {
-    setTheme(localStorage.getItem("theme"));
+    setTheme(localStorage.getItem("theme")!);
 }
