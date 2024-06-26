@@ -1,0 +1,11 @@
+body.dark-mode #footer {
+    background-color: #253b4d;
+}
+
+body.dark-mode .top-bar {
+    background-color: #043c64;
+}
+
+body.dark-mode .dropdown-menu {
+    background-color: #043c64;
+}

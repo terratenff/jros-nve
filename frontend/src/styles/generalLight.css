@@ -1,0 +1,11 @@
+body.light-mode #footer {
+    background-color: #5db3fb;
+}
+
+body.light-mode .top-bar {
+    background-color: #65b9f5;
+}
+
+body.light-mode .dropdown-menu {
+    background-color: #65b9f5;
+}
