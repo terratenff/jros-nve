@@ -1,6 +1,11 @@
 pipeline {
-    agent { docker { image 'node:20.16.0-alpine3.20' } }
+    agent { node { label 'testlabel' } }
     stages {
+        stage('test') {
+            steps {
+                sh 'echo Test print'
+            }
+        }
         stage('build') {
             steps {
                 sh 'node --version'
